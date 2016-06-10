@@ -1,0 +1,9 @@
+{
+  "regions": [
+    "us-east-1",
+    "eu-west-1",
+    "ap-northeast-1"
+  ],
+  "nodeCount": 3,
+  "vmSize": "t2.large"
+}

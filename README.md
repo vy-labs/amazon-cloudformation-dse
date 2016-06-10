@@ -8,15 +8,13 @@ To run the templates you will need to have the AWS CLI installed.  Instruction o
 
     aws configure
 
-To ensure the template is valid you can run the command:
-
-    aws cloudformation validate-template --template-body file://main.json
-
 ## Creating a Cluster
 
 To create a cluster run the command:
 
-    aws cloudformation create-stack --stack-name myteststack --template-body file://main.json
+    ./deploy.sh
+    
+This runs a python script that generates a CloudFormation template.  The script then validates the template and deploys it to create a cluster.
 
 ## Working with a Cluster
 
