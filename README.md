@@ -14,7 +14,9 @@ To ensure the template is valid you can run the command:
 
 ## Creating a Cluster
 
-The [deploy.sh](./deploy.sh) script will deploy a cluster using the aws cli create stack command and this template.
+To create a cluster run the command:
+
+    aws cloudformation create-stack --stack-name myteststack --template-body file://main.json
 
 ## Working with a Cluster
 
