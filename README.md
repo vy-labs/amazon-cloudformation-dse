@@ -2,7 +2,7 @@
 
 These don't work yet.  Sorry.
 
-This is an Amazon CloudFormation template that will deploy a single or multiple datacenter DataStax Enterprise cluster.  
+This is an Amazon CloudFormation template generator that will deploy a single or multiple datacenter DataStax Enterprise cluster.  
 
 To run the templates you will need to have the AWS CLI installed.  Instruction on that are available [here](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).  Documentation for the AWS CLI is [here](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-using-cli.html).  To configure the AWS CLI run the command:
 
@@ -12,9 +12,9 @@ To run the templates you will need to have the AWS CLI installed.  Instruction o
 
 To create a cluster run the command:
 
-    ./deploy.sh
+    ./deploy.sh myteststack
     
-This runs a python script that generates a CloudFormation template.  The script then validates the template and deploys it to create a cluster.
+This runs a python script that generates a CloudFormation template.  It takes one argument, the name of the stack to create.  The script then validates the template and deploys it to create a cluster.
 
 ## Working with a Cluster
 

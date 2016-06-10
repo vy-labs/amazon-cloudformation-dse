@@ -13,6 +13,7 @@ nodeCount = clusterParameters['nodeCount']
 
 # This is the skeleton of the template that we're going to add resources to
 generatedTemplate = {
+    "resources": [],
 }
 
 # Create DSE nodes in each location
