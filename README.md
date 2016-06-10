@@ -10,7 +10,7 @@ To run the templates you will need to have the AWS CLI installed.  Instruction o
 
 To ensure the template is valid you can run the command:
 
-    aws cloudformation validate-template --template-body main.json
+    aws cloudformation validate-template --template-body file://main.json
 
 ## Creating a Cluster
 
