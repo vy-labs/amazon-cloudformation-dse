@@ -10,7 +10,7 @@
     "ap-southeast-1a",
     "ap-southeast-1b"
   ],
-  "nodeCount": 3,
+  "nodesPerZone": 3,
   "vmSize": "t2.large",
   "KeyName": "datastax"
 }
