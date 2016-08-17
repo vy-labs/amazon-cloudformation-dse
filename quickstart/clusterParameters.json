@@ -1,0 +1,10 @@
+{
+  "availabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1d"
+  ],
+  "nodesPerAvailabilityZone": 3,
+  "vmSize": "t2.large",
+  "KeyName": "datastax"
+}

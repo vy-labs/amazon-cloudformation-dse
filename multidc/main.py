@@ -1,6 +1,7 @@
 import json
-import opsCenter
-import nodes
+
+import multidc.opsCenter
+from multidc import nodes, opsCenter
 
 # This python script generates a CloudFormation template that deploys DSE across multiple regions.
 

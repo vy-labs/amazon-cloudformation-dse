@@ -2,4 +2,4 @@
 *.idea
 
 # Programmatically generated template file created by main.py
-generatedTemplate.json
+multidc/generatedTemplate.json
