@@ -2,6 +2,10 @@
 
 # For development only, unfit for human consumption.
 
+## General points
+- Don't try anything smaller than a t2.medium, I don't think even the install finishes correctly.
+- Looks like the VPC takes presidence over the cloudformation template?
+
 Calling `create-key-pair` returns json w/ private key, key-name, and fingerprint.
 Assuming it would return text if pref set that way.
 
