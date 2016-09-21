@@ -16,7 +16,10 @@
       "Type": "AWS::EC2::KeyPair::KeyName",
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
     },
-
+    "VpcId" : {
+          "Type" : "String",
+          "Description" : "VpcId of your existing Virtual Private Cloud (VPC)"
+        },
     "InstanceType" : {
       "Description" : "WebServer EC2 instance type",
       "Type" : "String",
