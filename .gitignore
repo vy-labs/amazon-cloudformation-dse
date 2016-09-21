@@ -1,5 +1,8 @@
 # PyCharm files
 *.idea
+#nano tmp files
+*.swp
 
+# Azure kruft?
 # Programmatically generated template file created by main.py
-multidc/generatedTemplate.json
+# multidc/generatedTemplate.json
