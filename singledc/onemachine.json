@@ -12,7 +12,7 @@
     },
 
     "InstanceType" : {
-      "Description" : "WebServer EC2 instance type",
+      "Description" : "Cassandra node EC2 instance type",
       "Type" : "String",
       "Default" : "t2.medium",
       "AllowedValues" : [ "t1.micro", "t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large"]
@@ -60,7 +60,7 @@
 
   "Resources" : {
 
-    "WebServer": {
+    "Node": {
       "Type": "AWS::EC2::Instance",
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
@@ -85,10 +85,10 @@
                 "content": { "Fn::Join" : ["", [
                   "[cfn-auto-reloader-hook]\n",
                   "triggers=post.update\n",
-                  "path=Resources.WebServer.Metadata.AWS::CloudFormation::Init\n",
+                  "path=Resources.Node.Metadata.AWS::CloudFormation::Init\n",
                   "action=/usr/local/bin/cfn-init -v ",
                   "         --stack ", { "Ref" : "AWS::StackName" },
-                  "         --resource WebServer ",
+                  "         --resource Node ",
                   "         --configsets full_install ",
                   "         --region ", { "Ref" : "AWS::Region" }, "\n",
                   "runas=root\n"
@@ -129,10 +129,10 @@
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
         "InstanceType"   : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
+        "SecurityGroups" : [ {"Ref" : "NodeSecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash -xe\n",
+          "#!/bin/bash \n",
           "apt-get update\n",
           "apt-get -y install python-setuptools python-pip\n",
           "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz \n",
@@ -141,25 +141,25 @@
           "update-rc.d cfn-hup defaults \n",
           "/usr/local/bin/cfn-init -v ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource WebServer ",
+          "         --resource Node ",
           "         --configsets full_install ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n",
           "/usr/local/bin/cfn-signal -e $? ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource WebServer ",
+          "         --resource Node ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n"
         ]]}}
       },
 
       "CreationPolicy" : {
         "ResourceSignal" : {
-          "Timeout" : "PT30M"
+          "Timeout" : "PT5M"
         }
       }
 
     },
 
-    "WebServerSecurityGroup" : {
+    "NodeSecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
         "GroupDescription" : "Enable HTTP and SSH access",
@@ -175,7 +175,7 @@
 
   "Outputs" : {
     "WebsiteURL" : {
-      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ]}, ":8888" ]] },
+      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "Node", "PublicDnsName" ]}, ":8888" ]] },
       "Description" : "URL for OpsCenter"
     }
   }
