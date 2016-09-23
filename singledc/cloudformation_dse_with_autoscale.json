@@ -127,6 +127,7 @@
                   "unzip master.zip \n",
                   "cd install-datastax-ubuntu-master/bin \n",
                   "head -n $(grep -n \"./opscenter/start.sh\" opscenter.sh | cut -f1 -d:) opscenter.sh > trim.sh \n",
+                  "chmod 755 ./trim.sh \n",
                   "./trim.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
 
                   ]]},
