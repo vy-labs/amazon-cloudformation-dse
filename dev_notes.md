@@ -62,3 +62,8 @@ opscenter_dns_name=$4
 ```
 
 Trying fixed IPs for OpsC and seed node, 172.31.16.10 and 172.31.16.20
+
+OpsC instance doesn't finish cloud-init, manage_existing_cluster.sh not returning -> opscenter.sh note returning -> cfn-init not returning SUCCESS.
+
+Fixed (typo): Template bug for cloud-init on SeedNodeInstance
+Error occurred during build: No configuration found with name: install_des
