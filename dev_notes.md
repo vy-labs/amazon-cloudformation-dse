@@ -63,7 +63,37 @@ opscenter_dns_name=$4
 
 Trying fixed IPs for OpsC and seed node, 172.31.16.10 and 172.31.16.20
 
-OpsC instance doesn't finish cloud-init, manage_existing_cluster.sh not returning -> opscenter.sh note returning -> cfn-init not returning SUCCESS.
+OpsC instance doesn't finish cloud-init:
+manage_existing_cluster.sh not returning ->
+opscenter.sh note returning ->
+cfn-init not returning SUCCESS.
 
 Fixed (typo): Template bug for cloud-init on SeedNodeInstance
 Error occurred during build: No configuration found with name: install_des
+
+On Agents panel of OpsC seed node had private IP, rest public? Causing problems?
+You can use curl to the public or local ip from within an instance:
+```
+ubuntu@ip-172-31-16-10:~$ curl http://169.254.169.254/latest/meta-data/public-ipv4
+52.88.228.221
+ubuntu@ip-172-31-16-10:~$ curl http://169.254.169.254/latest/meta-data/local-ipv4
+172.31.16.10
+```
+
+I was confusing cloud-init and cfn-init, and the [pip install](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html) is the way for cfn-init.
+
+Kludge to pause OpsC install
+```
+"head -n $(grep -n \"./opscenter/start.sh\" opscenter.sh | cut -f1 -d:) opscenter.sh > trim.sh \n",
+"chmod 755 ./trim.sh \n",
+"./trim.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
+```
+
+Get info on seed_node from seed_node:
+```
+"seed_node_dns_name=\"$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)\" \n",
+```
+Get info from other instance:
+```
+{ "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicDnsName" ] }
+```
