@@ -5,7 +5,7 @@
 
  "Parameters" : {
 
- "OperatorEMail": {
+    "OperatorEMail": {
       "Description": "EMail address to notify if there are any scaling operations",
       "Type": "String",
       "AllowedPattern": "([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)",
@@ -63,13 +63,14 @@
       "us-west-2"        : {"HVM64" : "ami-f701cb97"},
       "us-west-1"        : {"HVM64" : "ami-1bf0b37b"}
     }
-
   },
 
   "Resources" : {
 
     "OpsCenterInstance": {
       "Type": "AWS::EC2::Instance",
+      "DependsOn" : "CassandraGroup",
+
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
@@ -118,8 +119,8 @@
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
                   "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"ip-172-31-16-20\" \n",
-                  "echo \"Configuring nodes with the settings:\" \n",
+                  "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
+                  "echo \"Configuring OpsCenter with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
                   "echo seed_node_dns_name $seed_node_dns_name \n",
                   "apt-get -y install unzip \n",
@@ -129,18 +130,17 @@
                   "head -n $(grep -n \"./opscenter/start.sh\" opscenter.sh | cut -f1 -d:) opscenter.sh > trim.sh \n",
                   "chmod 755 ./trim.sh \n",
                   "./trim.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
-
                   ]]},
               }
             }
           }
         }
       },
+
       "Properties": {
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
         "InstanceType"   : { "Ref" : "InstanceType" },
-        "PrivateIpAddress" : "172.31.16.10",
         "SecurityGroups" : [ {"Ref" : "DSESecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
@@ -221,7 +221,7 @@
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
                   "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"ip-172-31-16-20\" \n",
+                  "seed_node_dns_name=\"$(hostname)\" \n",
                   "echo \"Configuring nodes with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
                   "echo seed_node_dns_name $seed_node_dns_name \n",
@@ -240,7 +240,6 @@
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
         "InstanceType"   : { "Ref" : "InstanceType" },
-        "PrivateIpAddress" : "172.31.16.20",
         "SecurityGroups" : [ {"Ref" : "DSESecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
@@ -271,7 +270,6 @@
 
     },
 
-
     "DSETopic": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
@@ -288,6 +286,7 @@
 
     "CassandraGroup": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "DependsOn" : "SeedNodeInstance",
       "Properties": {
         "AvailabilityZones": {
           "Fn::GetAZs": ""
@@ -324,7 +323,6 @@
         }
       }
     },
-
 
     "CassandraLaunchConfig": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
@@ -376,7 +374,7 @@
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
                   "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"ip-172-31-16-20\" \n",
+                  "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
                   "echo \"Configuring nodes with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
                   "echo seed_node_dns_name $seed_node_dns_name \n",
@@ -444,7 +442,11 @@
 
   "Outputs" : {
     "WebsiteURL" : {
-      "Value" : "Port: 8888",
+      "Value" : { "Fn::Join" : ["", [
+        "http://",
+        { "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicDnsName" ] },
+        ":8888"
+        ]]},
       "Description" : "URL for OpsCenter"
     }
   }
