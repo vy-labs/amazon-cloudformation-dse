@@ -139,7 +139,7 @@
                   "cd ~ubuntu \n",
                   "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
                   "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-master/bin \n",
+                  "cd install-datastax-ubuntu-aws-testing/bin \n",
                   "./opscenter.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
                   ]]},
               }
@@ -184,6 +184,7 @@
 
     "SeedNodeInstance": {
       "Type": "AWS::EC2::Instance",
+      "DependsOn" : "OpsCenterEIP",
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
@@ -240,8 +241,8 @@
                   "cd ~ubuntu \n",
                   "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
                   "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-master/bin \n",
-                  "./dse.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
+                  "cd install-datastax-ubuntu-aws-testing/bin \n",
+                  "./dse.sh $cloud_type $seed_node_dns_name $data_center_name ", { "Ref" : "OpsCenterEIP" }
                   ]]}
               }
             }
@@ -394,7 +395,7 @@
                   "cd ~ubuntu \n",
                   "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
                   "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-master/bin \n",
+                  "cd install-datastax-ubuntu-aws-testing/bin \n",
                   "./dse.sh $cloud_type $seed_node_dns_name $data_center_name ", { "Ref" : "OpsCenterEIP" },
                   " \n"
                   ]]}
@@ -455,7 +456,7 @@
   },
 
   "Outputs" : {
-    "WebsiteURL" : {
+    "OpsCenterURL" : {
       "Value" : { "Fn::Join" : ["", [
         "http://",
         { "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicDnsName" ] },
