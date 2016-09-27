@@ -97,3 +97,14 @@ Get info from other instance:
 ```
 { "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicDnsName" ] }
 ```
+
+trim Kludge
+```
+"head -n $(grep -n \"./opscenter/start.sh\" opscenter.sh | cut -f1 -d:) opscenter.sh > trim.sh \n",
+"chmod 755 ./trim.sh \n",
+"./trim.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
+```
+un-kludge
+```
+"./opscenter.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
+```
