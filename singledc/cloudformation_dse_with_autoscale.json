@@ -8,7 +8,7 @@
     "OperatorEMail": {
       "Description": "EMail address to notify if there are any scaling operations",
       "Type": "String",
-      "Default" : "nobody@nowhere.com",
+      "Default" : "donotreply@datastax.com",
       "AllowedPattern": "([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)",
       "ConstraintDescription": "must be a valid email address."
     },
