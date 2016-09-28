@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "AWS CloudFormation Sample Template DataStax Enterprise: Create a DSE cluster with OpsCenter on EC2. This template demonstrates using the AWS CloudFormation bootstrap scripts to install the packages and files necessary to deploy DSE. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+  "Description" : "AWS CloudFormation Sample Template DataStax Enterprise: Create a DSE cluster with OpsCenter on EC2. This template demonstrates using the AWS CloudFormation bootstrap scripts to install the packages and files necessary to deploy DSE. **WARNING** This template creates Amazon EC2 instances. You will be billed for the AWS resources used if you create a stack from this template.",
 
  "Parameters" : {
 
@@ -81,7 +81,6 @@
 
     "OpsCenterInstance": {
       "Type": "AWS::EC2::Instance",
-      "DependsOn" : "CassandraGroup",
 
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
@@ -184,7 +183,6 @@
 
     "SeedNodeInstance": {
       "Type": "AWS::EC2::Instance",
-      "DependsOn" : "OpsCenterEIP",
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
@@ -299,7 +297,6 @@
 
     "CassandraGroup": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
-      "DependsOn" : "SeedNodeInstance",
       "Properties": {
         "AvailabilityZones": {
           "Fn::GetAZs": ""
@@ -307,8 +304,8 @@
         "LaunchConfigurationName": {
           "Ref": "CassandraLaunchConfig"
         },
-        "MinSize": "3",
-        "MaxSize": "3",
+        "MinSize": "4",
+        "MaxSize": "4",
         "NotificationConfiguration": {
           "TopicARN": {
             "Ref": "DSETopic"
