@@ -6,19 +6,94 @@ To run the template you will need to have the AWS CLI installed.  Instruction on
 
     aws configure
 
-You will also need to [create a KeyPair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) named *dse_keypair* and save the .pem file to *~/.ssh/*
-
 ## Creating a Cluster
-**Note: _deploy.sh_ only creates one node at the moment!**
 
-To create a cluster run the command:
+This part of the repo contains 2 files to spin up a DSE cluster: _deploy-dse.sh_ which references *cloudformation_dse.json* an AWS CloudFormation template which describes the architecture of the cluster. After installing the AWS CLI, you can spin up a cluster simply by calling:
+```
+collin@zazen:singledc$ ./deploy-dse.sh
+No key-pair passed, generating key-pair...
+Key saved to ~/.ssh/dse-key-us-west-1.pem
+Using parameters:
+email ->       donotreply@datastax.com
+key ->         dse-keypair-us-west-1
+vpc ->         vpc-e82f3a8d
+size ->        4
+dcname ->      dc0
+instance ->    t2.medium
+sshlocation -> 0.0.0.0/0
+region ->      us-west-1
 
-    ./deploy.sh myteststack
+Validating template...
+{
+    "StackId": "arn:aws:cloudformation:us-west-1:819041172558:stack/dse-stack/f1a2a160-867d-11e6-b821-500c2171ae8e"
+}
+```
+When no arguments are passed the default values seen above are used. Note that all the default values are defined in the template except _region_ and _vpc_ which are AWS account defaults. Calling `deploy-dse.sh -h` prints a help message describing all the options the script understands:
+```
+---------------------------------------------------
+Usage:
+deploy-dse.sh [-h] [-e email] [-k keypair] [-v vpc] [-s size] [-d dcname]
+              [-i instance] [-l sshlocation] [-r region]
 
-It takes one argument, the name of the stack to create.  The script then validates the template and deploys it to create a cluster (printing json as shown below).
+Options:
+
+ -h             : display this message and exit
+ -e email       : email to send stack updates, default donotreply@datastax.com
+ -k keypair     : keypair name, if not passed a new key named dse-keypair-$region
+                  will be generated and saved to ~/.ssh
+ -v vpc         : VPC, VPC to spin up cluster in, if not passed account default VPC used
+ -s size        : cluster size (number of Cassandra nodes), if not passed template
+                  default 4 (3+1 seed) used
+ -d dcname      : datacenter name, default 'dc0'
+ -i instance    : instance type, default XXX
+ -l sshlocation : CIDR block instances will accept ssh connections from, if not passed
+                  template default 0.0.0.0/0 (everywhere) used
+ -r region      : AWS region, if not passed account default used
+
+---------------------------------------------------
 
 ```
-$ ./deploy.sh myteststack
+
+### Notes and Caveats
+
+- Currently these scripts have basic functionality and bugs certainly exist.
+- If not using the default _vpc_ it must be created **prior** to calling the script. This can be done by calling a command like the one below. The _--region_ argument is optional while _--cidr-block_ is manditory
+```
+aws ec2 create-vpc --region us-east-1 --cidr-block 10.0.0.0/16
+```
+- The _key-pair_ and _vpc_ used must be created in the region being used. The generated key-pair and default vpc satisfy this requirement.
+- The template is currently only valid for the 3 US regions: _us-west-1 us-west-2 us-east-1_
+
+## Working with a Cluster
+You can get information about a stack via the AWS web interface (go to _CloudFormation_ -> _Stack List_) or the CLI as described below.
+
+You can get a list of existing stacks by running the command:
+
+    aws cloudformation list-stacks
+
+Log information is viewable by running the command:
+
+    aws cloudformation describe-stack-events --stack-name myteststack
+
+This command will give a list of resources in the stack:
+
+    aws cloudformation list-stack-resources --stack-name myteststack
+
+This command will delete the stack and the cluster contained in it:
+
+    aws cloudformation delete-stack --stack-name myteststack
+
+
+## Creating a Single Node
+
+To create a single node run the command:
+
+    ./deploy-single.sh myteststack key-pair
+
+It takes 2 arguments, the name of the stack to create and the name of a key-pair.  The script then validates the template and deploys it to create a cluster (printing json as shown below).
+
+```
+$ ./deploy-single.sh myteststack test-keypair
 
 {
     "Description": "AWS CloudFormation Sample Template DataStax Enterprise: Create a DSE stack using a single EC2 instance. This template demonstrates using the AWS CloudFormation bootstrap scripts to install the packages and files necessary to deploy DSE. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
@@ -48,7 +123,7 @@ $ ./deploy.sh myteststack
 ```
 Once the instance is running (which may take several minutes) you can ssh to its public ip and see that DSE is running.
 ```
-$ ssh -i ~/.ssh/dse_keypair.pem ubuntu@52.88.228.9
+$ ssh -i ~/.ssh/test-keypair.pem ubuntu@52.88.228.9
 .......
 ubuntu@ip-172-31-22-164:~$ cqlsh
 Connected to Test Cluster at 127.0.0.1:9042.
@@ -58,23 +133,3 @@ cqlsh>
 
 ```
 Tip: if you're changing the template and creating/destroying the instance you may need to delete the key's entry from *~/.ssh/known_hosts*
-
-## Working with a Cluster
-
-You can get a list of existing stacks by running the command:
-
-    aws cloudformation list-stacks
-
-Log information is viewable by running the command:
-
-    aws cloudformation describe-stack-events --stack-name myteststack
-
-This command will give a list of resources in the stack:
-
-    aws cloudformation list-stack-resources --stack-name myteststack
-
-## Deleting a Cluster
-
-This command will delete the stack and the cluster contained in it:
-
-    aws cloudformation delete-stack --stack-name myteststack
