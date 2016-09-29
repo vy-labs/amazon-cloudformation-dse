@@ -19,7 +19,7 @@ key ->         dse-keypair-us-west-1
 vpc ->         vpc-e82f3a8d
 size ->        4
 dcname ->      dc0
-instance ->    t2.medium
+instance ->    m4.large
 sshlocation -> 0.0.0.0/0
 region ->      us-west-1
 
@@ -45,7 +45,7 @@ Options:
  -s size        : cluster size (number of Cassandra nodes), if not passed template
                   default 4 (3+1 seed) used
  -d dcname      : datacenter name, default 'dc0'
- -i instance    : instance type, default XXX
+ -i instance    : instance type, default m4.large
  -l sshlocation : CIDR block instances will accept ssh connections from, if not passed
                   template default 0.0.0.0/0 (everywhere) used
  -r region      : AWS region, if not passed account default used
@@ -53,6 +53,7 @@ Options:
 ---------------------------------------------------
 
 ```
+After calling the script the cluster should spinn up in about 15min. You can watch its progress from the web interface at  _CloudFormation -> Stack List -> Stack Detail: dse-stack_ or with some of the commands listed in the *Working with a Cluster* section. After the stack has completed in the _Outputs_ section there's a link to the OpsCenter web interface which will be something like `http://ec2-52-52-131-168.us-west-1.compute.amazonaws.com:8888/`. This URL can also be found by running `aws cloudformation describe-stacks`
 
 ### Notes and Caveats
 
@@ -63,6 +64,8 @@ aws ec2 create-vpc --region us-east-1 --cidr-block 10.0.0.0/16
 ```
 - The _key-pair_ and _vpc_ used must be created in the region being used. The generated key-pair and default vpc satisfy this requirement.
 - The template is currently only valid for the 3 US regions: _us-west-1 us-west-2 us-east-1_
+- The instance type _t2.medium_ is included only for testing purposes and should not be used for a real cluster.
+- This template uses an _AutoScalingGroup_ to bring up non-seed nodes. This group isn't intended to be dynamically scaled. While growing the size of this group most likely will work, shrinking it will have unknown side effects.
 
 ## Working with a Cluster
 You can get information about a stack via the AWS web interface (go to _CloudFormation_ -> _Stack List_) or the CLI as described below.
