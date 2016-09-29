@@ -8,7 +8,7 @@ vpc=$(aws ec2 describe-vpcs --filter Name="isDefault",Values="true" --output tex
 #^^^ default for account, use --query instead of cut?
 size=3 # +1 seednode
 dcname="dc0"
-instance="t2.medium"
+instance="m4.large"
 sshlocation="0.0.0.0/0"
 
 usage="---------------------------------------------------
@@ -26,7 +26,7 @@ Options:
  -s size	: cluster size (number of Cassandra nodes), if not passed template
 		  default 4 (3+1 seed) used
  -d dcname	: datacenter name, default 'dc0'
- -i instance	: instance type, default XXX
+ -i instance	: instance type, default m4.large
  -l sshlocation	: CIDR block instances will accept ssh connections from, if not passed
 		  template default 0.0.0.0/0 (everywhere) used
  -r region	: AWS region, if not passed account default used
@@ -61,21 +61,21 @@ while getopts 'he:k:v:s:d:i:l:r:' opt; do
 done
 
 # Generate keypair for region
-if [ -e ~/.ssh/dse-key-$region.pem ] && [ -z "$key" ]
+if [ -e ~/.ssh/dse-keypair-$region.pem ] && [ -z "$key" ]
 then
   echo -e "Default key exists"
   key=dse-keypair-$region
 elif [ -z "$key" ]
 then
   echo "No key-pair passed, generating key-pair..."
-  aws ec2 create-key-pair --region $region --key-name dse-keypair-$region --query 'KeyMaterial' --output text > ~/.ssh/dse-key-$region.pem
+  aws ec2 create-key-pair --region $region --key-name dse-keypair-$region --query 'KeyMaterial' --output text > ~/.ssh/dse-keypair-$region.pem
   if [ $? -gt 0 ]
   then
     echo "Key generation error. Exiting..."
   fi
-  chmod 600 ~/.ssh/dse-key-$region.pem
+  chmod 600 ~/.ssh/dse-keypair-$region.pem
   key=dse-keypair-$region
-  echo "Key saved to ~/.ssh/dse-key-"$region".pem"
+  echo "Key saved to ~/.ssh/dse-keypair-"$region".pem"
 fi
 
 # for info
