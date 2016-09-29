@@ -108,3 +108,39 @@ un-kludge
 ```
 "./opscenter.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
 ```
+
+First try of deploy-dse.sh. ~~There's a bug with $region~~ Fixed
+
+```
+collin@zazen:singledc$ aws ec2 create-vpc --region us-east-1 --cidr-block 10.0.0.0/16
+{
+    "Vpc": {
+        "VpcId": "vpc-33fad254",
+        "InstanceTenancy": "default",
+        "State": "pending",
+        "DhcpOptionsId": "dopt-528b4c36",
+        "CidrBlock": "10.0.0.0/16",
+        "IsDefault": false
+    }
+}
+collin@zazen:singledc$
+collin@zazen:singledc$
+collin@zazen:singledc$ ./deploy-dse.sh -r "us-east-1" -v "vpc-33fad254"
+./deploy-dse.sh: illegal option -- r
+Invalid option -
+Using parameters:
+email ->	 donotreply@datastax.com
+key ->		 dse-keypair-us-west-2
+vpc ->		 vpc-631fd407
+size ->		 4
+dcname ->	 dc0
+instance ->	 t2.medium
+sshlocation ->	 0.0.0.0/0
+region ->	 us-west-2
+
+Validating template...
+{
+    "StackId": "arn:aws:cloudformation:us-west-2:819041172558:stack/dse-stack/7e445fb0-8673-11e6-b10f-50a68a201256"
+}
+collin@zazen:singledc$
+```
