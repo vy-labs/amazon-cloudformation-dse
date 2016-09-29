@@ -27,7 +27,7 @@
 
     "ClusterSize" : {
       "Type" : "Number",
-      "Description" : "Cluster spun up will be n+1 Cassandra nodes",
+      "Description" : "Cluster spun up will be n + 1 seed node",
       "Default" : "3"
     },
 
