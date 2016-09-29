@@ -88,7 +88,7 @@ echo -e "sshlocation ->\t" $sshlocation "\nregion ->\t" $region "\n"
 echo -e "Validating template..."
 
 aws cloudformation validate-template \
---template-body "$(cat ./cloudformation_dse_with_autoscale.json)" \
+--template-body "$(cat ./cloudformation_dse.json)" \
 1>/dev/null
 
 if [ $? -gt 0 ]
@@ -103,7 +103,7 @@ echo -e "Calling: aws cloudformation create-stack...\n"
 aws cloudformation create-stack \
 --stack-name "dse-stack" \
 --region $region \
---template-body "$(cat ./cloudformation_dse_with_autoscale.json)" \
+--template-body "$(cat ./cloudformation_dse.json)" \
 --parameters \
 ParameterKey=KeyName,ParameterValue=$key \
 ParameterKey=OperatorEMail,ParameterValue=$email \
