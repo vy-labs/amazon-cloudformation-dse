@@ -53,7 +53,7 @@ Options:
 ---------------------------------------------------
 
 ```
-After calling the script the cluster should spinn up in about 15min. You can watch its progress from the web interface at  _CloudFormation -> Stack List -> Stack Detail: dse-stack_ or with some of the commands listed in the *Working with a Cluster* section. After the stack has completed in the _Outputs_ section there's a link to the OpsCenter web interface which will be something like `http://ec2-52-52-131-168.us-west-1.compute.amazonaws.com:8888/`. This URL can also be found by running `aws cloudformation describe-stacks`
+After calling the script the cluster should spin up in about 15min. You can watch its progress from the web interface at  _CloudFormation -> Stack List -> Stack Detail: dse-stack_ or with some of the commands listed in the *Working with a Cluster* section. After the stack has completed in the _Outputs_ section there's a link to the OpsCenter web interface which will be something like `http://ec2-52-52-131-168.us-west-1.compute.amazonaws.com:8888/`. This URL can also be found by running `aws cloudformation describe-stacks`
 
 ### Notes and Caveats
 
@@ -88,6 +88,7 @@ This command will delete the stack and the cluster contained in it:
 
 
 ## Creating a Single Node
+Note: _deploy-single.sh_ and _single-node.json_ are for didactic or testing purposed only, they are not intended to be used to build a cluster.
 
 To create a single node run the command:
 
