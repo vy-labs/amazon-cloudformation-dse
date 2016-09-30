@@ -55,9 +55,10 @@ Options:
 ```
 After calling the script the cluster should spin up in about 15min. You can watch its progress from the web interface at  _CloudFormation -> Stack List -> Stack Detail: dse-stack_ or with some of the commands listed in the *Working with a Cluster* section. After the stack has completed in the _Outputs_ section there's a link to the OpsCenter web interface which will be something like `http://ec2-52-52-131-168.us-west-1.compute.amazonaws.com:8888/`. This URL can also be found by running `aws cloudformation describe-stacks`
 
-### Notes and Caveats
+## Notes and Caveats
 
 - Currently these scripts have basic functionality and bugs certainly exist.
+- Currently all instances use ephemeral storage.
 - If not using the default _vpc_ it must be created **prior** to calling the script. This can be done by calling a command like the one below. The _--region_ argument is optional while _--cidr-block_ is manditory
 ```
 aws ec2 create-vpc --region us-east-1 --cidr-block 10.0.0.0/16
