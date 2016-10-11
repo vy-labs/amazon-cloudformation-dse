@@ -89,7 +89,7 @@ This command will delete the stack and the cluster contained in it:
 
 
 ## Creating a Single Node
-Note: _deploy-single.sh_ and _single-node.json_ are for didactic or testing purposed only, they are not intended to be used to build a cluster.
+Note: _deploy-single.sh_ and _single-node.json_ are for didactic or testing purposes only, they are not intended to be used to build a cluster.
 
 To create a single node run the command:
 
