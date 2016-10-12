@@ -13,7 +13,7 @@ sshlocation="0.0.0.0/0"
 
 usage="---------------------------------------------------
 Usage:
-deploy-dse.sh [-h] [-e email] [-k keypair] [-v vpc] [-s size] [-d dcname]
+deploy.sh [-h] [-e email] [-k keypair] [-v vpc] [-s size] [-d dcname]
               [-i instance] [-l sshlocation] [-r region]
 
 Options:

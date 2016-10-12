@@ -4,8 +4,3 @@
 *.swp
 # scratch work
 *scratch*
-
-# May not be needed, should be able to call same template in
-# different regions if Mappings contain needed info.
-# Programmatically generated template file created by main.py
-# multidc/generatedTemplate.json
