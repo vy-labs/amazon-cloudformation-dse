@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # options defaults, validity check at template call by aws cli
-#
+# Note!!! We're naively passing all params to aws cli to avoid any
+# default/non checking logic => if the defaults change in the template
+# they must also be changed here
+
 email="donotreply@datastax.com" # a no-op
 region=$(aws configure get region)
 vpc=$(aws ec2 describe-vpcs --filter Name="isDefault",Values="true" --output text | cut -f7)
-#^^^ default for account, use --query instead of cut?
+# ^^^ default for account, use --query instead of cut?
 size=3 # +1 seednode
 dcname="dc0"
 instance="m4.large"

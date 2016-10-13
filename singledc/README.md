@@ -6,6 +6,30 @@ To run the template you will need to have the AWS CLI installed.  Instruction on
 
     aws configure
 
+To check if the AWS CLI is properly configured run `aws ec2 describe-account-attributes` as shown below.
+```
+collin@zazen:LCMtest$ aws ec2 describe-account-attributes
+{
+    "AccountAttributes": [
+        {
+            "AttributeName": "supported-platforms",
+            "AttributeValues": [
+                {
+                    "AttributeValue": "VPC"
+                }
+            ]
+        },
+        {
+            "AttributeName": "vpc-max-security-groups-per-interface",
+            "AttributeValues": [
+                {
+                    "AttributeValue": "5"
+                }
+            ]
+        },
+[[[output trimmed]]]
+```
+
 ## Creating a Cluster
 
 This part of the repo contains 2 files to spin up a DSE cluster: _deploy-dse.sh_ which references *cloudformation_dse.json* an AWS CloudFormation template which describes the architecture of the cluster. After installing the AWS CLI, you can spin up a cluster simply by calling:
