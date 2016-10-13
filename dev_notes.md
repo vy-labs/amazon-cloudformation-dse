@@ -144,3 +144,55 @@ Validating template...
 }
 collin@zazen:singledc$
 ```
+
+To 'name' an instance see below:
+"Value": "opsc", "Key": "Name"
+"opsc" shouldn't be a SeedNode? Human error?
+
+```
+"SourceDestCheck": true,
+"Placement": {
+    "Tenancy": "default",
+    "GroupName": "",
+    "AvailabilityZone": "us-west-1a"
+},
+"Hypervisor": "xen",
+"BlockDeviceMappings": [
+    {
+        "DeviceName": "/dev/sda1",
+        "Ebs": {
+            "Status": "attached",
+            "DeleteOnTermination": true,
+            "VolumeId": "vol-0c514cb0",
+            "AttachTime": "2016-10-10T04:00:01.000Z"
+        }
+    }
+],
+"Architecture": "x86_64",
+"RootDeviceType": "ebs",
+"RootDeviceName": "/dev/sda1",
+"VirtualizationType": "hvm",
+"Tags": [
+    {
+        "Value": "SeedNodeInstance",
+        "Key": "aws:cloudformation:logical-id"
+    },
+    {
+        "Value": "dse-stack",
+        "Key": "aws:cloudformation:stack-name"
+    },
+    {
+        "Value": "arn:aws:cloudformation:us-west-1:819041172558:stack/dse-stack/f58fc
+af0-8e9d-11e6-849d-500cc1786482",
+        "Key": "aws:cloudformation:stack-id"
+    },
+    {
+        "Value": "opsc",
+        "Key": "Name"
+    }
+],
+"AmiLaunchIndex": 0
+}
+]
+},
+```
