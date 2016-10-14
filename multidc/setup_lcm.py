@@ -23,6 +23,7 @@ print cred
 
 configjson = json.dumps({"datastax-version":"5.0.3", "name":"default","comment":"default profile"})
 # add field like: "json":{"cassandra-yaml":{"gc_warn_threshold_in_ms":1500} } for customization
+# should add num_tokens?
 
 config = requests.post("http://{url}/api/v1/lcm/config_profiles/".format(url=opsc_url), data=configjson).json()
 print config
