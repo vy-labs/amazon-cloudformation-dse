@@ -261,7 +261,7 @@
                   "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/master.zip \n",
                   "unzip master.zip \n",
                   "cd amazon-cloudformation-dse-master/multidc \n",
-                  "nodeCallback.py \n"
+                  "./nodeCallback.py \n"
                   ]]},
               }
             }
