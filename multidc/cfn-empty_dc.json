@@ -11,6 +11,14 @@
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
     },
 
+    "OperatorEMail": {
+      "Description": "EMail address to notify if there are any scaling operations",
+      "Type": "String",
+      "Default" : "donotreply@datastax.com",
+      "AllowedPattern": "([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)",
+      "ConstraintDescription": "must be a valid email address."
+    },
+
     "ClusterSize" : {
       "Type" : "Number",
       "Description" : "Cluster spun up will be n + 1 seed node",
@@ -170,6 +178,17 @@
         },
         "MinSize": {"Ref" : "ClusterSize"},
         "MaxSize": {"Ref" : "ClusterSize"},
+        "NotificationConfiguration": {
+          "TopicARN": {
+            "Ref": "DSETopic"
+          },
+          "NotificationTypes": [
+            "autoscaling:EC2_INSTANCE_LAUNCH",
+            "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+            "autoscaling:EC2_INSTANCE_TERMINATE",
+            "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
+          ]
+        }
       },
       "CreationPolicy": {
         "ResourceSignal": {
@@ -192,7 +211,7 @@
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
-            "full_install" : [ "install_cfn" ]
+            "full_install" : [ "install_cfn" , "join_cluster"]
           },
 
           "install_cfn" : {
@@ -227,6 +246,23 @@
               "sysvinit" : {
                 "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
                               "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
+              }
+            }
+          },
+          "join_cluster" : {
+            "commands" : {
+              "01_join_cluster" : {
+                "command" : { "Fn::Join" : ["", [
+                  "#!/usr/bin/env bash \n",
+                  "apt-get install -y unzip \n",
+                  "apt-get install -y python-pip\n",
+                  "pip install requests \n",
+                  "cd ~ubuntu \n",
+                  "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/master.zip \n",
+                  "unzip master.zip \n",
+                  "cd amazon-cloudformation-dse-master/multidc \n",
+                  "nodeCallback.py \n"
+                  ]]},
               }
             }
           }
@@ -264,7 +300,19 @@
         }
       }
     },
-
+    "DSETopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [
+          {
+            "Endpoint": {
+              "Ref": "OperatorEMail"
+            },
+            "Protocol": "email"
+          }
+        ]
+      }
+    },
     "DSESecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
