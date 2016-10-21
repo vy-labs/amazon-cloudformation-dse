@@ -20,7 +20,7 @@ To check if the AWS CLI is properly configured running `aws ec2 describe-account
 
 To clone this repo use the command:
 ```
-git clone https://github.com/DSPN/google-compute-engine-dse.git
+git clone https://github.com/DSPN/amazon-cloudformation-dse.git
 ```
 The *singledc* directory contains 2 files to spin up a DSE cluster: _deploy.sh_ which references *cloudformation_dse.json* an AWS CloudFormation template which describes the architecture of the cluster. After installing the AWS CLI, you can spin up a cluster simply by running `deploy.sh` which will use default values.
 
