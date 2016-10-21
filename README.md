@@ -64,6 +64,7 @@ When you call the script (with or without options) you'll see output similar to 
 ![deploy.sh gif](./imgs/deploy_sh.gif)
 
 After calling the script the cluster should spin up in < 15 minutes. You can watch its progress either from the AWS web console [CloudFormation](https://console.aws.amazon.com/cloudformation/home) page (shown below) or by running `aws cloudformation describe-stack-events --stack-name dse-stack`
+
 ![cfn console png](imgs/cfn_consile.png)
 
 After the stack has completed in the _Outputs_ section of the web console there's a link to the OpsCenter web interface which will be something like:
