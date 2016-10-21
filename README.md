@@ -73,7 +73,7 @@ This URL can also be found by running `aws cloudformation describe-stacks --stac
 ![OpsCenter gif](./imgs/opsc_url.gif)
 
 ## OpsCenter
-Opening this URL in a browser will present the OpsCenter interface to the cluster.
+Opening this URL in a browser will present the OpsCenter interface to the cluster. The OpsCenter [user guide](https://docs.datastax.com/en/latest-opscenter/) details many cluster management and monitoring operations.
 
 ![OpsCenter gif](./imgs/opsc.gif)
 
