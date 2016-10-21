@@ -63,7 +63,8 @@ When you call the script (with or without options) you'll see output similar to 
 
 ![deploy.sh gif](./imgs/deploy_sh.gif)
 
-After calling the script the cluster should spin up in < 15 minutes. You can watch its progress either from the AWS web console [CloudFormation](https://console.aws.amazon.com/cloudformation/home) page or by running `aws cloudformation describe-stack-events --stack-name dse-stack`
+After calling the script the cluster should spin up in < 15 minutes. You can watch its progress either from the AWS web console [CloudFormation](https://console.aws.amazon.com/cloudformation/home) page (shown below) or by running `aws cloudformation describe-stack-events --stack-name dse-stack`
+![cfn console png](imgs/cfn_consile.png)
 
 After the stack has completed in the _Outputs_ section of the web console there's a link to the OpsCenter web interface which will be something like:
 `http://ec2-52-52-131-168.us-east-1.compute.amazonaws.com:8888/`
@@ -75,7 +76,7 @@ This URL can also be found by running `aws cloudformation describe-stacks --stac
 ## OpsCenter
 Opening this URL in a browser will present the OpsCenter interface to the cluster. The OpsCenter [user guide](https://docs.datastax.com/en/latest-opscenter/) details many cluster management and monitoring operations.
 
-![OpsCenter gif](./imgs/opsc.gif)
+![OpsCenter gif](./imgs/opsc.png)
 
 ## Caveats
 - Currently these scripts have basic functionality and bugs certainly exist.
