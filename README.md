@@ -88,8 +88,8 @@ Opening this URL in a browser will present the OpsCenter interface to the cluste
 aws ec2 create-vpc --region us-east-1 --cidr-block 10.0.0.0/16
 ```
 
-- The template is currently only valid for the 3 US regions: _us-west-1 us-west-2_ & _us-east-1_
-- The _region_ must match for the _stack vpc_ & _keypair_
+- The template is currently only valid for the 3 US regions: _us-west-1, us-west-2,_ & _us-east-1_
+- The _region_ must match for the _stack, vpc,_ & _keypair_
 - The instance type _t2.medium_ is included only for testing purposes and should not be used for a real cluster.
 - This template uses an _AutoScalingGroup_ to bring up non-seed nodes. This group isn't intended to be dynamically scaled. While growing the size of this group most likely will work, shrinking it will have unknown side effects.
 
