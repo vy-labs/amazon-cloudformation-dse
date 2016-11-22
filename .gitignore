@@ -1,7 +1,7 @@
 # PyCharm files
 *.idea
 #nano tmp files
-*nanp.save
+*nano.save
 *.swp
 # scratch work
 *scratch*
