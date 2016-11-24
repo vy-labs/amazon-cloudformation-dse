@@ -33,6 +33,7 @@ dsecred = json.dumps({
 defaultconfig = json.dumps({
     "name":"Default config",
     "datastax-version": "5.0.3",
+    "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.DseAuthenticator"}}
 })
 
 # Constants that should go elsewhere?
