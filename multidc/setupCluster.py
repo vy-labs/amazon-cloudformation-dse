@@ -131,7 +131,7 @@ def main():
     parser = setupArgs()
     args = parser.parse_args()
     clustername = args.clustername
-    opsc_url = opsc_ip+':8888'
+    opsc_url = args.opsc_ip+':8888'
     keypath = os.path.abspath(args.privkey)
     with open(keypath, 'r') as keyfile:
         privkey=keyfile.read()
