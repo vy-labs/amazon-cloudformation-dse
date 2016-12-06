@@ -2,6 +2,9 @@ import requests
 import json
 import time
 
+# Yay globals!
+opsc_url = "127.0.0.0:8888"
+
 def addCluster(cname, credid, repoid, configid):
     try:
         conf = json.dumps({
