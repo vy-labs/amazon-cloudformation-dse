@@ -25,22 +25,10 @@
       "Default" : "AWS::EC2::VPC"
     },
 
-    "ClusterSize" : {
-      "Type" : "Number",
-      "Description" : "Cluster spun up will be n + 1 seed node",
-      "Default" : "3"
-    },
-
-    "DataCenterName" : {
-      "Type" : "String",
-      "Description" : "Name of DSE datacenter",
-      "Default" : "dc0"
-    },
-
     "InstanceType" : {
       "Description" : "Node EC2 instance type",
       "Type" : "String",
-      "Default" : "m4.large",
+      "Default" : "t2.medium",
       "AllowedValues" : [ "t2.medium", "m4.large", "m4.xlarge", "m4.2xlarge", "m4.4xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge"],
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
@@ -167,8 +155,8 @@
       "hs1.8xlarge" : { "Arch" : "NATHVM64"  },
       "cr1.8xlarge" : { "Arch" : "NATHVM64"  },
       "cc2.8xlarge" : { "Arch" : "NATHVM64"  }
-    }
-,
+    },
+
     "AWSRegionArch2AMI" : {
       "us-east-1"        : {"HVM64" : "ami-feb6fee9"},
       "us-west-2"        : {"HVM64" : "ami-01eb3061"},
@@ -197,7 +185,7 @@
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
-            "full_install" : [ "install_cfn", "install_opsc" ]
+            "full_install" : [ "install_cfn", "install_opsc" , "gen_ssh_key", "setup_cluster"]
           },
 
           "install_cfn" : {
@@ -239,126 +227,46 @@
             "commands" : {
               "01_install_opsc" : {
                 "command" : { "Fn::Join" : ["", [
-                  "#!/usr/bin/env bash \n",
+                  "#!/usr/bin/env bash -e \n",
                   "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
-                  "echo \"Configuring OpsCenter with the settings:\" \n",
-                  "echo cloud_type $cloud_type \n",
-                  "echo seed_node_dns_name $seed_node_dns_name \n",
                   "apt-get -y install unzip \n",
                   "cd ~ubuntu \n",
-                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
-                  "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-aws-testing/bin \n",
-                  "./opscenter.sh $cloud_type $seed_node_dns_name $data_center_name &\n"
-                  ]]},
-              }
-            }
-          }
-        }
-      },
-
-      "Properties": {
-        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
-        "InstanceType"   : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ {"Ref" : "DSESecurityGroup"} ],
-        "KeyName"        : { "Ref" : "KeyName" },
-        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash -xe\n",
-          "apt-get update\n",
-          "apt-get -y install python-setuptools python-pip\n",
-          "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz \n",
-          "ln -s /usr/local/init/ubuntu/cfn-hup /etc/init.d/cfn-hup \n",
-          "chmod 775 /usr/local/init/ubuntu/cfn-hup \n",
-          "update-rc.d cfn-hup defaults \n",
-          "/usr/local/bin/cfn-init -v ",
-          "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource OpsCenterInstance ",
-          "         --configsets full_install ",
-          "         --region ", { "Ref" : "AWS::Region" }, "\n",
-          "/usr/local/bin/cfn-signal -e 0 ",
-          "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource OpsCenterInstance ",
-          "         --region ", { "Ref" : "AWS::Region" }, "\n"
-        ]]}}
-      },
-
-      "CreationPolicy" : {
-        "ResourceSignal" : {
-          "Timeout" : "PT300M"
-        }
-      }
-
-    },
-
-    "SeedNodeInstance": {
-      "Type": "AWS::EC2::Instance",
-      "Metadata" : {
-        "AWS::CloudFormation::Init" : {
-          "configSets" : {
-            "full_install" : [ "install_cfn", "install_dse" ]
-          },
-
-          "install_cfn" : {
-            "files" : {
-              "/etc/cfn/cfn-hup.conf" : {
-                "content" : { "Fn::Join" : ["", [
-                  "[main]\n",
-                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
-                  "region=", { "Ref" : "AWS::Region" }, "\n"
-                ]]},
-                "mode"    : "000400",
-                "owner"   : "root",
-                "group"   : "root"
-              },
-
-              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
-                "content": { "Fn::Join" : ["", [
-                  "[cfn-auto-reloader-hook]\n",
-                  "triggers=post.update\n",
-                  "path=Resources.SeedNodeInstance.Metadata.AWS::CloudFormation::Init\n",
-                  "action=/usr/local/bin/cfn-init -v ",
-                  "         --stack ", { "Ref" : "AWS::StackName" },
-                  "         --resource SeedNodeInstance ",
-                  "         --configsets full_install ",
-                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
-                  "runas=root\n"
-                ]]}
-              }
-            },
-
-            "services" : {
-              "sysvinit" : {
-                "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
-                              "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
-              }
-            }
-          },
-          "install_dse" : {
-            "commands" : {
-              "01_install_dse" : {
-                "command" : { "Fn::Join" : ["", [
-                  "#!/usr/bin/env bash \n",
-                  "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"$(hostname)\" \n",
-                  "echo \"Configuring nodes with the settings:\" \n",
-                  "echo cloud_type $cloud_type \n",
-                  "echo seed_node_dns_name $seed_node_dns_name \n",
-                  "apt-get -y install unzip \n",
-                  "cd ~ubuntu \n",
-                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
-                  "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-aws-testing/bin \n",
-                  "./dse.sh $cloud_type $seed_node_dns_name $data_center_name ", { "Ref" : "OpsCenterEIP" }
+                  "sudo apt-get -y install unzip \n",
+                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/master.zip \n",
+                  "unzip master.zip && \n",
+                  "cd install-datastax-ubuntu-master/bin/ \n",
+                  "sudo ./os/install_java.sh \n",
+                  "sudo ./opscenter/install.sh $cloud_type \n",
+                  "sudo ./opscenter/start.sh"
                   ]]}
               }
             }
+          },
+        "gen_ssh_key" : {
+          "commands" : {
+            "01_gen_ssh_key" : {
+              "command" : { "Fn::Join" : ["", [
+                "#!/usr/bin/env bash -e \n",
+                "cd ~ubuntu/.ssh/ \n",
+                "ssh-keygen -t rsa -N '' -f lcm.pem \n",
+                "echo 'Generated lcm.pem and lcm.pem.pub'"
+                ]]}
+            }
+          }
+        },
+      "setup_cluster" : {
+        "commands" : {
+          "01_setup_cluster" : {
+            "command" : { "Fn::Join" : ["", [
+              "#!/usr/bin/env bash -e \n",
+              "echo 'setup stuff'"
+              ]]}
           }
         }
-      },
+      }
+      }
+    },
+
       "Properties": {
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
@@ -375,23 +283,17 @@
           "update-rc.d cfn-hup defaults \n",
           "/usr/local/bin/cfn-init -v ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource SeedNodeInstance ",
+          "         --resource OpsCenterInstance ",
           "         --configsets full_install ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n",
           "/usr/local/bin/cfn-signal -e 0 ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource SeedNodeInstance ",
+          "         --resource OpsCenterInstance ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n"
-        ]]}}
-      },
+        ]]}},
 
-      "CreationPolicy" : {
-        "ResourceSignal" : {
-          "Timeout" : "PT300M"
-        }
-      }
-
-    },
+    }
+  },
 
     "DSETopic": {
       "Type": "AWS::SNS::Topic",
@@ -404,145 +306,6 @@
             "Protocol": "email"
           }
         ]
-      }
-    },
-
-    "CassandraGroup": {
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-      "Properties": {
-        "AvailabilityZones": {
-          "Fn::GetAZs": ""
-        },
-        "LaunchConfigurationName": {
-          "Ref": "CassandraLaunchConfig"
-        },
-        "MinSize": {"Ref" : "ClusterSize"},
-        "MaxSize": {"Ref" : "ClusterSize"},
-        "NotificationConfiguration": {
-          "TopicARN": {
-            "Ref": "DSETopic"
-          },
-          "NotificationTypes": [
-            "autoscaling:EC2_INSTANCE_LAUNCH",
-            "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
-            "autoscaling:EC2_INSTANCE_TERMINATE",
-            "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
-          ]
-        }
-      },
-      "CreationPolicy": {
-        "ResourceSignal": {
-          "Timeout": "PT30M",
-          "Count": "1"
-        }
-      },
-      "UpdatePolicy": {
-        "AutoScalingRollingUpdate": {
-          "MinInstancesInService": "1",
-          "MaxBatchSize": "1",
-          "PauseTime": "PT30M",
-          "WaitOnResourceSignals": "true"
-        }
-      }
-    },
-
-    "CassandraLaunchConfig": {
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-      "Metadata" : {
-        "AWS::CloudFormation::Init" : {
-          "configSets" : {
-            "full_install" : [ "install_cfn", "install_dse" ]
-          },
-
-          "install_cfn" : {
-            "files" : {
-              "/etc/cfn/cfn-hup.conf" : {
-                "content" : { "Fn::Join" : ["", [
-                  "[main]\n",
-                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
-                  "region=", { "Ref" : "AWS::Region" }, "\n"
-                ]]},
-                "mode"    : "000400",
-                "owner"   : "root",
-                "group"   : "root"
-              },
-
-              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
-                "content": { "Fn::Join" : ["", [
-                  "[cfn-auto-reloader-hook]\n",
-                  "triggers=post.update\n",
-                  "path=Resources.WebServer.Metadata.AWS::CloudFormation::Init\n",
-                  "action=/usr/local/bin/cfn-init -v ",
-                  "         --stack ", { "Ref" : "AWS::StackName" },
-                  "         --resource WebServer ",
-                  "         --configsets full_install ",
-                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
-                  "runas=root\n"
-                ]]}
-              }
-            },
-
-            "services" : {
-              "sysvinit" : {
-                "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
-                              "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
-              }
-            }
-          },
-          "install_dse" : {
-            "commands" : {
-              "01_install_dse" : {
-                "command" : { "Fn::Join" : ["", [
-                  "#!/usr/bin/env bash \n",
-                  "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
-                  "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
-                  "echo \"Configuring nodes with the settings:\" \n",
-                  "echo cloud_type $cloud_type \n",
-                  "echo seed_node_dns_name $seed_node_dns_name \n",
-                  "apt-get -y install unzip \n",
-                  "cd ~ubuntu \n",
-                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
-                  "unzip aws-testing.zip \n",
-                  "cd install-datastax-ubuntu-aws-testing/bin \n",
-                  "./dse.sh $cloud_type $seed_node_dns_name $data_center_name ", { "Ref" : "OpsCenterEIP" },
-                  " \n"
-                  ]]}
-              }
-            }
-          }
-        }
-      },
-      "Properties": {
-        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
-        "InstanceType"   : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ {"Ref" : "DSESecurityGroup"} ],
-        "KeyName"        : { "Ref" : "KeyName" },
-        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash -xe\n",
-          "apt-get update\n",
-          "apt-get -y install python-setuptools python-pip\n",
-          "pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz \n",
-          "ln -s /usr/local/init/ubuntu/cfn-hup /etc/init.d/cfn-hup \n",
-          "chmod 775 /usr/local/init/ubuntu/cfn-hup \n",
-          "update-rc.d cfn-hup defaults \n",
-          "/usr/local/bin/cfn-init -v ",
-          "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource CassandraLaunchConfig ",
-          "         --configsets full_install ",
-          "         --region ", { "Ref" : "AWS::Region" }, "\n",
-          "/usr/local/bin/cfn-signal -e $? ",
-          "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource CassandraGroup ",
-          "         --region ", { "Ref" : "AWS::Region" }, "\n"
-        ]]}}
-      },
-
-      "CreationPolicy" : {
-        "ResourceSignal" : {
-          "Timeout" : "PT30M"
-        }
       }
     },
 

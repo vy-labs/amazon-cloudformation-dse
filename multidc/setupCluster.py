@@ -4,7 +4,8 @@ import json
 import time
 import argparse
 
-#Yay globals!
+# sYay globals!
+# These should move to a config file, passed as arg
 dserepo = json.dumps({
     "name":"DSE repo",
     "username":"collin.poczatek+awstesting@gmail.com",
@@ -27,17 +28,17 @@ defaultconfig = json.dumps({
 })
 
 def setupArgs():
-    parser = argparse.ArgumentParser(description='Add calling instance to an LCM managed DSE cluster.')
+    parser = argparse.ArgumentParser(description='Setup LCM managed DSE cluster, repo, config, and ssh creds')
     required = parser.add_argument_group('Required named arguments')
     required.add_argument('--opsc-ip', required=True, type=str,
-                          help='Public ip of OpsCenter instance.')
+                          help='public ip of OpsCenter instance')
     required.add_argument('--clustername', required=True, type=str,
                           help='Name of cluster.')
-    parser.add_argument('--privkey', required=True, type=str,
-                        help='Private key (public key on all nodes) to be used by OpsCenter.')
+    required.add_argument('--privkey', required=True, type=str,
+                          help='private key (public key on all nodes) to be used by OpsCenter')
     parser.add_argument('--verbose',
                         action='store_true',
-                        help='Verbose flag, right now a NO-OP.' )
+                        help='verbose flag, right now a NO-OP' )
     return parser
 
 
@@ -155,7 +156,7 @@ def main():
     privkey = args.privkey
 
     waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
-    
+
 
 # ----------------------------
 if __name__ == "__main__":
