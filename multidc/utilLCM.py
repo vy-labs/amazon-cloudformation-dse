@@ -81,7 +81,7 @@ def addRepo(repo):
         # Do something?
         raise
 
-def waitForOpsC(opsc_url):
+def waitForOpsC():
     # Constants that should go elsewhere?
     maxtrys = 100 #connection attempts
     timeout = 0.1 # connection timeout in sec
