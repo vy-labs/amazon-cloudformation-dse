@@ -27,9 +27,6 @@ def writepubkey(pubkey):
     #No-op, this should happen up in the IaaS?
     return True
 
-def pretty(data):
-    print '\n', json.dumps(data, sort_keys=True, indent=4), '\n'
-
 def main():
     parser = setupArgs()
     args = parser.parse_args()
@@ -73,7 +70,7 @@ def main():
             "ssh-management-address": privateip})
     node = requests.post("http://{url}/api/v1/lcm/nodes/".format(url=opsc_url),data=nodeconf).json()
     print("Added node '{n}', json:".format(n=nodename))
-    pretty(node)
+    lcm.pretty(node)
 
     nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']

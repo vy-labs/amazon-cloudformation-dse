@@ -20,10 +20,6 @@ def setupArgs():
                         help='verbose flag, right now a NO-OP' )
     return parser
 
-
-def pretty(data):
-    print '\n', json.dumps(data, sort_keys=True, indent=4), '\n'
-
 def main():
     parser = setupArgs()
     args = parser.parse_args()
@@ -53,7 +49,7 @@ def main():
         "datastax-version": "5.0.3",
         "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.AllowAllAuthenticator"}}})
 
-    lcm.waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
+    lcm.waitForOpsC()  # Block waiting for OpsC to spin up
 
     # return config instead of bool?
     c = lcm.checkForCluster(clustername)

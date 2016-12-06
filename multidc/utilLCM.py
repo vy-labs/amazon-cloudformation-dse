@@ -5,6 +5,9 @@ import time
 # Yay globals!
 opsc_url = "127.0.0.0:8888"
 
+def pretty(data):
+    print '\n', json.dumps(data, sort_keys=True, indent=4), '\n'
+
 def addCluster(cname, credid, repoid, configid):
     try:
         conf = json.dumps({
