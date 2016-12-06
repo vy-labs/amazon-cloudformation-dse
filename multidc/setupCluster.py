@@ -99,6 +99,12 @@ def addRepo(repo):
 
 # Copying code! Should move all LCM calls out to util file
 def waitForOpsC(opsc_url):
+    # Constants that should go elsewhere?
+    maxtrys = 100 #connection attempts
+    timeout = 0.1 # connection timeout in sec
+    pause = 6 # sleep between attempts in sec
+    # maxtrys * pause = 600 sec or 10 min, should be enough time for
+    # OpsC instance to come up.
     count = 0
     while(True):
         count += 1
