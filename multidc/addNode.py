@@ -2,39 +2,30 @@
 import requests
 import json
 import time
+import argparse
 
 # TODO!
-# - get rid of the private key moron
-# - parse args
 # - addThing methods should return id value, or None with failure
 
-# Yay globals! These should get moved up/out to config file
-clustername = 'testcluster'
-opsc_url = '107.23.208.9:8888'
-datacenters = ['dc0','dc1','dc2']
-dcname = 'dc0'
-dcsize = 2
 
-dserepo = json.dumps({
-    "name":"DSE repo",
-    "username":"collin.poczatek+awstesting@gmail.com",
-    "password":"Cassandra1"})
+def setupArgs():
+    parser = argparse.ArgumentParser(description='Add calling instance to an LCM managed DSE cluster.')
+    required = parser.add_argument_group('Required named arguments')
+    required.add_argument('--opsc-ip', required=True, type=str,
+                          help='Public ip of OpsCenter instance.')
+    required.add_argument('--clustername', required=True, type=str,
+                          help='Name of cluster.')
+    required.add_argument('--dcname', required=True, type=str, help='Name of datacenter.')
+    parser.add_argument('--dcsize', type=int, default=3,
+                        help='Number of nodes in datacenter, default 3.')
+    parser.add_argument('--verbose',
+                        action='store_true',
+                        help='Verbose flag, right now a NO-OP.' )
+    return parser
 
-privkey = ""
-
-dsecred = json.dumps({
-    "become-mode":"sudo",
-    "use-ssh-keys":True,
-    "name":"dse creds",
-    "login-user":"ubuntu",
-    "ssh-private-key":privkey,
-    "become-user":None})
-
-defaultconfig = json.dumps({
-    "name":"Default config",
-    "datastax-version": "5.0.3",
-    "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.DseAuthenticator"}}
-})
+def writepubkey(pubkey):
+    #No-op, this should happen up in the IaaS?
+    return True
 
 # Constants that should go elsewhere?
 maxtrys = 100 #connection attempts
@@ -92,82 +83,6 @@ def checkForCluster(cname):
         raise
     return (cname in clusterconf)
 
-def addCluster(cname, credid, repoid, configid):
-    try:
-        conf = json.dumps({
-            'name': cname,
-            'machine-credential-id': credid,
-            'repository-id': repoid,
-            'config-profile-id': configid})
-        clusterconf = requests.post("http://{url}/api/v1/lcm/clusters/".format(url=opsc_url),data=conf).json()
-        print("Added cluster, json:")
-        pretty(clusterconf)
-        return clusterconf['id']
-    except requests.exceptions.Timeout as e:
-        print("Request for cluster config timed out.")
-        return None
-    except requests.exceptions.ConnectionError as e:
-        print("Request for cluster config refused.")
-        return None
-    except Exception as e:
-        # Do something?
-        raise
-    return clusterconf
-
-def addCred(cred):
-    try:
-        creds = requests.get("http://{url}/api/v1/lcm/machine_credentials/".format(url=opsc_url)).json()
-        if (creds['count']==0):
-            creds = requests.post("http://{url}/api/v1/lcm/machine_credentials/".format(url=opsc_url),data=cred).json()
-            print("Added default dse creds, json:")
-            pretty(creds)
-            return creds
-    except requests.exceptions.Timeout as e:
-        print("Request to add ssh creds timed out.")
-        return None
-    except requests.exceptions.ConnectionError as e:
-        print("Request to add ssh creds refused.")
-        return None
-    except Exception as e:
-        # Do something?
-        raise
-
-def addConfig(conf):
-    try:
-        configs = requests.get("http://{url}/api/v1/lcm/config_profiles/".format(url=opsc_url)).json()
-        if (configs['count']==0):
-            config = requests.post("http://{url}/api/v1/lcm/config_profiles/".format(url=opsc_url),data=conf).json()
-            print("Added default condig profile, json:")
-            pretty(config)
-            return config
-    except requests.exceptions.Timeout as e:
-        print("Request to add config profile timed out.")
-        return None
-    except requests.exceptions.ConnectionError as e:
-        print("Request to add config profile refused.")
-        return None
-    except Exception as e:
-        # Do something?
-        raise
-
-def addRepo(repo):
-    try:
-        repos = requests.get("http://{url}/api/v1/lcm/repositories/".format(url=opsc_url)).json()
-        if (repos['count']==0):
-            repconf = requests.post("http://{url}/api/v1/lcm/repositories/".format(url=opsc_url),data=dserepo).json()
-            print("Added default repo, json:")
-            pretty(repconf)
-            return repconf
-    except requests.exceptions.Timeout as e:
-        print("Request to add repo timed out.")
-        return None
-    except requests.exceptions.ConnectionError as e:
-        print("Request to add repo refused.")
-        return None
-    except Exception as e:
-        # Do something?
-        raise
-
 def checkForDC(dcname):
     try:
         dcs = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url)).json()
@@ -216,12 +131,20 @@ def triggerInstall(dcid):
     pretty(response)
 
 def main():
-    # eventual arg parsing
-    #parser = setupArgs()
-    #args = parser.parse_args()
-    # Should be args
+    parser = setupArgs()
+    args = parser.parse_args()
+
+    clustername = args.clustername
+    opsc_url = opsc-ip+':8888'
+    #datacenters = ['dc0','dc1','dc2']
+    dcname = args.dcname
+    dcsize = args.dcsize
+    #pubkey = args.pubkey
 
     waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
+
+    #writepubkey(pubkey)
+    # ^^^ no-op, should happen up in the IaaS?
 
     # return config instead of bool?
     c = checkForCluster(clustername)
