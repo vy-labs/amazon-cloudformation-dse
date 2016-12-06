@@ -164,6 +164,18 @@ def main():
 
     waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
 
+    # return config instead of bool?
+    c = checkForCluster(clustername)
+    if (c == False): # cluster doesn't esist -> must be 1st node -> do setup
+        print("Cluster {n} doesn't exist, creating...".format(n=clustername))
+        cred = addCred(dsecred)
+        repo = addRepo(dserepo)
+        conf = addConfig(defaultconfig)
+        cid = addCluster(clustername, cred['id'], repo['id'], conf['id'])
+    else:
+        print("Cluster {n} exists".format(n=clustername))
+
+
 
 # ----------------------------
 if __name__ == "__main__":

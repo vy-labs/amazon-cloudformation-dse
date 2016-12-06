@@ -144,16 +144,17 @@ def main():
     #writepubkey(pubkey)
     # ^^^ no-op, should happen up in the IaaS?
 
+    # vvv moved to setupCluster.py
     # return config instead of bool?
-    c = checkForCluster(clustername)
-    if (c == False): # cluster doesn't esist -> must be 1st node -> do setup
-        print("Cluster {n} doesn't exist, creating...".format(n=clustername))
-        cred = addCred(dsecred)
-        repo = addRepo(dserepo)
-        conf = addConfig(defaultconfig)
-        cid = addCluster(clustername, cred['id'], repo['id'], conf['id'])
-    else:
-        print("Cluster {n} exists".format(n=clustername))
+    # c = checkForCluster(clustername)
+    # if (c == False): # cluster doesn't esist -> must be 1st node -> do setup
+    #     print("Cluster {n} doesn't exist, creating...".format(n=clustername))
+    #     cred = addCred(dsecred)
+    #     repo = addRepo(dserepo)
+    #     conf = addConfig(defaultconfig)
+    #     cid = addCluster(clustername, cred['id'], repo['id'], conf['id'])
+    # else:
+    #     print("Cluster {n} exists".format(n=clustername))
 
     # Check if the DC --this-- node should belong to exists, if not create-stack
     c = checkForDC(dcname)
