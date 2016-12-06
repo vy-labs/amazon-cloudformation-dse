@@ -4,28 +4,6 @@ import json
 import time
 import argparse
 
-# sYay globals!
-# These should move to a config file, passed as arg
-dserepo = json.dumps({
-    "name":"DSE repo",
-    "username":"collin.poczatek+awstesting@gmail.com",
-    "password":"Cassandra1"})
-
-privkey = ""
-
-dsecred = json.dumps({
-    "become-mode":"sudo",
-    "use-ssh-keys":True,
-    "name":"dse creds",
-    "login-user":"ubuntu",
-    "ssh-private-key":privkey,
-    "become-user":None})
-
-defaultconfig = json.dumps({
-    "name":"Default config",
-    "datastax-version": "5.0.3",
-    "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.AllowAllAuthenticator"}}
-})
 
 def setupArgs():
     parser = argparse.ArgumentParser(description='Setup LCM managed DSE cluster, repo, config, and ssh creds')
@@ -153,7 +131,29 @@ def main():
     args = parser.parse_args()
     clustername = args.clustername
     opsc_url = opsc-ip+':8888'
-    privkey = args.privkey
+    keypath = os.path.abspath(args.privkey)
+    with open(keypath, 'r') as keyfile:
+        privkey=keyfile.read()
+
+# sYay globals!
+# These should move to a config file, passed as arg maybe ?
+    dserepo = json.dumps({
+        "name":"DSE repo",
+        "username":"collin.poczatek+awstesting@gmail.com",
+        "password":"Cassandra1"})
+
+    dsecred = json.dumps({
+        "become-mode":"sudo",
+        "use-ssh-keys":True,
+        "name":"dse creds",
+        "login-user":"ubuntu",
+        "ssh-private-key":privkey,
+        "become-user":None})
+
+    defaultconfig = json.dumps({
+        "name":"Default config",
+        "datastax-version": "5.0.3",
+        "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.AllowAllAuthenticator"}}})
 
     waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
 

@@ -259,6 +259,11 @@
           "01_setup_cluster" : {
             "command" : { "Fn::Join" : ["", [
               "#!/usr/bin/env bash -e \n",
+              "cd ~ubuntu \n",
+              "pip install requests \n",
+              "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
+              "unzip dev.zip \n",
+              "cd amazon-cloudformation-dse-dev/multidc/ \n",
               "echo 'setup stuff'"
               ]]}
           }
