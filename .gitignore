@@ -1,3 +1,5 @@
+*.pyc
+
 # PyCharm files
 *.idea
 #nano tmp files
