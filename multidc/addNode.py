@@ -39,17 +39,17 @@ def main():
     dcsize = args.dcsize
     #pubkey = args.pubkey
 
-    waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
+    lcm.waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
 
     #writepubkey(pubkey)
     # ^^^ no-op, should happen up in the IaaS?
 
     # Check if the DC --this-- node should belong to exists, if not add DC
-    c = checkForDC(dcname)
+    c = lcm.checkForDC(dcname)
     if (c == False):
         print("Datacenter {n} doesn't exist, creating...".format(n=dcname))
         clusters = requests.get("http://{url}/api/v1/lcm/clusters/".format(url=opsc_url)).json()
-        addDC(dcname,cid)
+        lcm.addDC(dcname,cid)
     else:
         print("Datacenter {d} exists".format(d=dcname))
 
@@ -77,7 +77,7 @@ def main():
     nodecount = nodes['count']
     if (nodecount == dcsize):
         print("Last node added, triggering install job...")
-        triggerInstall(dcid)
+        lcm.triggerInstall(dcid)
 
 # ----------------------------
 if __name__ == "__main__":
