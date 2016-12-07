@@ -11,10 +11,31 @@
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
     },
 
-    "ClusterSize" : {
+    "OpsCenterPubIP" : {
+      "Description" : "Public IP of OpsCenter instance.",
+      "Type" : "String",
+      "ConstraintDescription" : "must be valid and public IP"
+    },
+
+    "ClusterName" : {
+      "Description" : "Name of DSE cluster",
+      "Type" : "String"
+    },
+
+    "DataCenterName" : {
+      "Description" : "Name of DSE cluster",
+      "Type" : "String"
+    },
+
+    "DataCenterSize" : {
       "Type" : "Number",
-      "Description" : "Cluster spun up will be n + 1 seed node",
-      "Default" : "3"
+      "Description" : "Number of nodes in datacenter",
+      "Default" : "6"
+    },
+
+    "PublicKey" : {
+      "Description" : "Public key matching private key used by LCM",
+      "Type" : "String"
     },
 
     "InstanceType" : {
@@ -162,14 +183,10 @@
     "CassandraGroup": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
-        "AvailabilityZones": {
-          "Fn::GetAZs": ""
-        },
-        "LaunchConfigurationName": {
-          "Ref": "CassandraLaunchConfig"
-        },
-        "MinSize": {"Ref" : "ClusterSize"},
-        "MaxSize": {"Ref" : "ClusterSize"},
+        "AvailabilityZones": { "Fn::GetAZs": "" },
+        "LaunchConfigurationName": { "Ref": "CassandraLaunchConfig" },
+        "MinSize": {"Ref" : "DataCenterSize"},
+        "MaxSize": {"Ref" : "DataCenterSize"}
       },
       "CreationPolicy": {
         "ResourceSignal": {
@@ -192,7 +209,7 @@
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
-            "full_install" : [ "install_cfn" ]
+            "full_install" : [ "install_cfn" , "add_node"]
           },
 
           "install_cfn" : {
@@ -229,7 +246,32 @@
                               "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
               }
             }
-          }
+          },
+          "add_node" : {
+            "commands" : {
+              "01_add_node" : {
+                "command" : { "Fn::Join" : ["", [
+                  "#!/usr/bin/env bash -e \n",
+                  "pip install requests \n",
+                  "cd ~ubuntu \n",
+                  "echo", { "Ref" : "PublicKey" }, " > ~/.ssh/lcm.pem.pub \n",
+                  "chown ubuntu:ubuntu ~/.ssh/lcm.pem.pub \n",
+                  "chmod 644 ~/.ssh/lcm.pem.pub \n",
+                  "apt-get -y install unzip \n",
+                  "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
+                  "unzip dev.zip && \n",
+                  "cd amazon-cloudformation-dse-dev/multidc \n",
+                  "./addNode.py \\ \n",
+                  "--opsc-ip ", { "Ref" : "OpsCenterPubIP" }, " \\ \n",
+                  "--clustername ", { "Ref" : "ClusterName" }, " \\ \n",
+                  "--dcsize ", { "Ref" : "DataCenterSize" } , " \\ \n",
+                  "--dcname ", { "Ref" : "DataCenterName" }, " \\ \n",
+                  " \\ \n",
+                  ]]}
+              }
+            }
+          },
+
         }
       },
       "Properties": {

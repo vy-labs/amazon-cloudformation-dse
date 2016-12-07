@@ -70,7 +70,7 @@ def addRepo(repo):
     try:
         repos = requests.get("http://{url}/api/v1/lcm/repositories/".format(url=opsc_url)).json()
         if (repos['count']==0):
-            repconf = requests.post("http://{url}/api/v1/lcm/repositories/".format(url=opsc_url),data=dserepo).json()
+            repconf = requests.post("http://{url}/api/v1/lcm/repositories/".format(url=opsc_url),data=repo).json()
             print("Added default repo, json:")
             pretty(repconf)
             return repconf

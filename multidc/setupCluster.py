@@ -39,7 +39,7 @@ def main():
     dsecred = json.dumps({
         "become-mode":"sudo",
         "use-ssh-keys":True,
-        "name":"dse creds",
+        "name":"DSE creds",
         "login-user":"ubuntu",
         "ssh-private-key":privkey,
         "become-user":None})
