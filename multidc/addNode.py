@@ -64,7 +64,10 @@ def main():
     # always add self to DC
     nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
-    nodename = 'node'+str(nodecount)
+    # simple counting for node number hits a race condition... work around
+    #nodename = 'node'+str(nodecount)
+    inst = requests.get("http://169.254.169.254/latest/meta-data/instance-id").content
+    nodename = 'node-'+inst
     privateip = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").content
     publicip = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4").content
     nodeconf = json.dumps({
