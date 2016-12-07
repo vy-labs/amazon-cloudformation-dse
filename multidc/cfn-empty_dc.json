@@ -265,8 +265,7 @@
                   "--opsc-ip ", { "Ref" : "OpsCenterPubIP" }, " \\ \n",
                   "--clustername ", { "Ref" : "ClusterName" }, " \\ \n",
                   "--dcsize ", { "Ref" : "DataCenterSize" } , " \\ \n",
-                  "--dcname ", { "Ref" : "DataCenterName" }, " \\ \n",
-                  " \\ \n",
+                  "--dcname ", { "Ref" : "DataCenterName" }, " \n",
                   ]]}
               }
             }
