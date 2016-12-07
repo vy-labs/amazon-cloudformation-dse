@@ -261,11 +261,11 @@
                   "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
                   "unzip dev.zip && \n",
                   "cd amazon-cloudformation-dse-dev/multidc \n",
-                  "./addNode.py \\ \n",
-                  "--opsc-ip ", { "Ref" : "OpsCenterPubIP" }, " \\ \n",
-                  "--clustername ", { "Ref" : "ClusterName" }, " \\ \n",
-                  "--dcsize ", { "Ref" : "DataCenterSize" } , " \\ \n",
-                  "--dcname ", { "Ref" : "DataCenterName" }, " \n",
+                  "./addNode.py ",
+                  " --opsc-ip ", { "Ref" : "OpsCenterPubIP" },
+                  " --clustername ", { "Ref" : "ClusterName" },
+                  " --dcsize ", { "Ref" : "DataCenterSize" },
+                  " --dcname ", { "Ref" : "DataCenterName" }
                   ]]}
               }
             }
