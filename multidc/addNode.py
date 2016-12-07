@@ -3,6 +3,7 @@ import requests
 import json
 import time
 import argparse
+import utilLCM as lcm
 
 # TODO!
 # - addThing methods should return id value, or None with failure
