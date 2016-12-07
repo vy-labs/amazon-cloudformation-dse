@@ -32,7 +32,7 @@ def main():
     args = parser.parse_args()
 
     clustername = args.clustername
-    lcm.opsc_url = opsc_ip+':8888'
+    lcm.opsc_url = args.opsc_ip+':8888'
     #datacenters = ['dc0','dc1','dc2']
     dcname = args.dcname
     dcsize = args.dcsize
