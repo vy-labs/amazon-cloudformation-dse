@@ -39,7 +39,7 @@ def main():
     dcsize = args.dcsize
     #pubkey = args.pubkey
 
-    lcm.waitForOpsC(opsc_url)  # Block waiting for OpsC to spin up
+    lcm.waitForOpsC()  # Block waiting for OpsC to spin up
 
     #writepubkey(pubkey)
     # ^^^ no-op, should happen up in the IaaS?
@@ -48,20 +48,22 @@ def main():
     c = lcm.checkForDC(dcname)
     if (c == False):
         print("Datacenter {n} doesn't exist, creating...".format(n=dcname))
-        clusters = requests.get("http://{url}/api/v1/lcm/clusters/".format(url=opsc_url)).json()
+        clusters = requests.get("http://{url}/api/v1/lcm/clusters/".format(url=lcm.opsc_url)).json()
+        cid = clusters['results'][0]['id']
         lcm.addDC(dcname,cid)
     else:
         print("Datacenter {d} exists".format(d=dcname))
 
     # kludge, assuming ony one cluster
     dcid = ""
-    datacenters = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url)).json()
+    datacenters = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=lcm.opsc_url)).json()
     for d in datacenters['results']:
         if (d['name'] == dcname):
             dcid = d['id']
 
+
     # always add self to DC
-    nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=opsc_url,dcid=dcid)).json()
+    nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
     nodename = 'node'+str(nodecount)
     privateip = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").content
@@ -69,11 +71,11 @@ def main():
             'name': nodename,
             "datacenter-id": dcid,
             "ssh-management-address": privateip})
-    node = requests.post("http://{url}/api/v1/lcm/nodes/".format(url=opsc_url),data=nodeconf).json()
+    node = requests.post("http://{url}/api/v1/lcm/nodes/".format(url=lcm.opsc_url),data=nodeconf).json()
     print("Added node '{n}', json:".format(n=nodename))
     lcm.pretty(node)
 
-    nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=opsc_url,dcid=dcid)).json()
+    nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
     if (nodecount == dcsize):
         print("Last node added, triggering install job...")
