@@ -47,7 +47,7 @@ def main():
     defaultconfig = json.dumps({
         "name":"Default config",
         "datastax-version": "5.0.3",
-        "json": {'cassandra-yaml': {"authenticator":"com.datastax.bdp.cassandra.auth.AllowAllAuthenticator"}}})
+        "json": {'cassandra-yaml': {"authenticator":"AllowAllAuthenticator"}}})
 
     lcm.waitForOpsC()  # Block waiting for OpsC to spin up
 

@@ -61,16 +61,20 @@ def main():
         if (d['name'] == dcname):
             dcid = d['id']
 
-
     # always add self to DC
     nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
     nodename = 'node'+str(nodecount)
     privateip = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").content
+    publicip = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4").content
     nodeconf = json.dumps({
             'name': nodename,
             "datacenter-id": dcid,
-            "ssh-management-address": privateip})
+            "ssh-management-address": privateip,
+            "listen-address": privateip,
+            "rpc-address": privateip,
+            "broadcast-address": publicip,
+            "broadcast-rpc-address": publicip})
     node = requests.post("http://{url}/api/v1/lcm/nodes/".format(url=lcm.opsc_url),data=nodeconf).json()
     print("Added node '{n}', json:".format(n=nodename))
     lcm.pretty(node)
