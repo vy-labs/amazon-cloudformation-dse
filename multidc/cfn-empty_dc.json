@@ -254,7 +254,7 @@
                   "#!/usr/bin/env bash -e \n",
                   "pip install requests \n",
                   "cd ~ubuntu \n",
-                  "echo \"", { "Ref" : "PublicKey" }, "\" > .ssh/lcm.pem.pub \n",
+                  "echo \"", { "Ref" : "PublicKey" }, "\" >> .ssh/authorized_keys \n",
                   "chown ubuntu:ubuntu .ssh/lcm.pem.pub \n",
                   "chmod 644 .ssh/lcm.pem.pub \n",
                   "apt-get -y install unzip \n",

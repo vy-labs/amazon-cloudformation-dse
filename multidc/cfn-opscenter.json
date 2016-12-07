@@ -249,6 +249,7 @@
                 "#!/usr/bin/env bash -e \n",
                 "cd ~ubuntu/.ssh/ \n",
                 "ssh-keygen -t rsa -N '' -f lcm.pem \n",
+                "chown ubuntu:ubuntu lcm.pem* \n",
                 "echo 'Generated lcm.pem and lcm.pem.pub'"
                 ]]}
             }
