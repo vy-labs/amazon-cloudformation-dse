@@ -13,11 +13,12 @@ size=3 # +1 seednode
 dcname="dc0"
 instance="m4.large"
 sshlocation="0.0.0.0/0"
+stackname="dse-stack"
 
 usage="---------------------------------------------------
 Usage:
 deploy.sh [-h] [-e email] [-k keypair] [-v vpc] [-s size] [-d dcname]
-              [-i instance] [-l sshlocation] [-r region]
+              [-i instance] [-l sshlocation] [-t stackname] [-r region]
 
 Options:
 
@@ -32,11 +33,12 @@ Options:
  -i instance	: instance type, default m4.large
  -l sshlocation	: CIDR block instances will accept ssh connections from, if not passed
 		  template default 0.0.0.0/0 (everywhere) used
+ -t stackname : name of CFn stack, default 'dse-stack'
  -r region	: AWS region, if not passed account default used
 
 ---------------------------------------------------"
 
-while getopts 'he:k:v:s:d:i:l:r:' opt; do
+while getopts 'he:k:v:s:d:i:l:t:r:' opt; do
   case $opt in
     h) echo -e "$usage"
        exit 1
@@ -54,6 +56,8 @@ while getopts 'he:k:v:s:d:i:l:r:' opt; do
     i) instance="$OPTARG"
     ;;
     l) sshlocation="$OPTARG"
+    ;;
+    t) stackname="$OPTARG"
     ;;
     r) region="$OPTARG"
     ;;
@@ -78,7 +82,7 @@ then
   fi
   chmod 600 ~/.ssh/dse-keypair-$region.pem
   key=dse-keypair-$region
-  echo "Key saved to ~/.ssh/dse-keypair-"$region".pem"
+  echo "Key saved to ~/.ssh/$key.pem"
 fi
 
 # for info
@@ -91,7 +95,7 @@ echo -e "sshlocation ->\t" $sshlocation "\nregion ->\t" $region "\n"
 echo -e "Validating template..."
 
 aws cloudformation validate-template \
---template-body "$(cat ./cloudformation_dse.json)" \
+--template-body "$(cat ./cfn-dse.json)" \
 1>/dev/null
 
 if [ $? -gt 0 ]
@@ -104,9 +108,9 @@ echo -e "Calling: aws cloudformation create-stack...\n"
 # Note, we're passing all params, even if the same as the
 # template defaults to avoid param checking logic
 aws cloudformation create-stack \
---stack-name "dse-stack" \
+--stack-name $stackname \
 --region $region \
---template-body "$(cat ./cloudformation_dse.json)" \
+--template-body "$(cat ./cfn-dse.json)" \
 --parameters \
 ParameterKey=KeyName,ParameterValue=$key \
 ParameterKey=OperatorEMail,ParameterValue=$email \
