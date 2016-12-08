@@ -14,7 +14,7 @@ def setupArgs():
     required.add_argument('--clustername', required=True, type=str,
                           help='Name of cluster.')
     required.add_argument('--privkey', required=True, type=str,
-                          help='private key (public key on all nodes) to be used by OpsCenter')
+                          help='abs path to private key (public key on all nodes) to be used by OpsCenter')
     parser.add_argument('--verbose',
                         action='store_true',
                         help='verbose flag, right now a NO-OP' )

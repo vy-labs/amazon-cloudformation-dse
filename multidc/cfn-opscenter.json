@@ -231,13 +231,13 @@
                   "cloud_type=\"aws\" \n",
                   "apt-get -y install unzip \n",
                   "cd ~ubuntu \n",
-                  "sudo apt-get -y install unzip \n",
-                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/master.zip \n",
-                  "unzip master.zip && \n",
-                  "cd install-datastax-ubuntu-master/bin/ \n",
-                  "sudo ./os/install_java.sh \n",
-                  "sudo ./opscenter/install.sh $cloud_type \n",
-                  "sudo ./opscenter/start.sh"
+                  "apt-get -y install unzip \n",
+                  "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
+                  "unzip aws-testing.zip \n",
+                  "cd install-datastax-ubuntu-aws-testing/bin \n",
+                  "./os/install_java.sh \n",
+                  "./opscenter/install.sh $cloud_type \n",
+                  "./opscenter/start.sh"
                   ]]}
               }
             }
@@ -265,7 +265,12 @@
               "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
               "unzip dev.zip \n",
               "cd amazon-cloudformation-dse-dev/multidc/ \n",
-              "echo 'setup stuff'"
+              "pubip=$(curl http://169.254.169.254/latest/meta-data/public-ipv4) \n",
+              "privkey=$(readlink -f ~ubuntu/.ssh/lcm.pem) \n",
+              "./setupCluster.py ",
+              "--opsc-ip $pubip ",
+              "--clustername ",{ "Ref" : "ClusterName" }, " ",
+              "--privkey $privkey "
               ]]}
           }
         }
