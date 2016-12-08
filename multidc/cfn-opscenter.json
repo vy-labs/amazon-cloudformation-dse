@@ -25,6 +25,12 @@
       "Default" : "AWS::EC2::VPC"
     },
 
+    "ClusterName" : {
+      "Description" : "Name of DSE cluster",
+      "Type" : "String",
+      "Default" : "DSE Cluster"
+    },
+
     "InstanceType" : {
       "Description" : "Node EC2 instance type",
       "Type" : "String",
