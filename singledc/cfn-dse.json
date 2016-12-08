@@ -31,6 +31,12 @@
       "Default" : "3"
     },
 
+    "ClusterName" : {
+      "Type" : "String",
+      "Description" : "Name of DSE cluster",
+      "Default" : "dse-cluster"
+    },
+
     "DataCenterName" : {
       "Type" : "String",
       "Description" : "Name of DSE datacenter",
@@ -241,7 +247,7 @@
                 "command" : { "Fn::Join" : ["", [
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
+                  "data_center_name=", { "Ref" : "DataCenterName" }," \n",
                   "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
                   "echo \"Configuring OpsCenter with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
@@ -342,7 +348,7 @@
                 "command" : { "Fn::Join" : ["", [
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
+                  "data_center_name=", { "Ref" : "DataCenterName" }," \n",
                   "seed_node_dns_name=\"$(hostname)\" \n",
                   "echo \"Configuring nodes with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
@@ -495,7 +501,7 @@
                 "command" : { "Fn::Join" : ["", [
                   "#!/usr/bin/env bash \n",
                   "cloud_type=\"aws\" \n",
-                  "data_center_name=\"dc0\" \n",
+                  "data_center_name=", { "Ref" : "DataCenterName" }," \n",
                   "seed_node_dns_name=\"", { "Fn::GetAtt" : [ "SeedNodeInstance" , "PrivateDnsName" ] }, "\" \n",
                   "echo \"Configuring nodes with the settings:\" \n",
                   "echo cloud_type $cloud_type \n",
