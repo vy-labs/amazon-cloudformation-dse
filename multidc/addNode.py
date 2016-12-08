@@ -73,7 +73,7 @@ def main():
     nodeconf = json.dumps({
             'name': nodename,
             "datacenter-id": dcid,
-            "ssh-management-address": privateip,
+            "ssh-management-address": publicip,
             "listen-address": privateip,
             "rpc-address": privateip,
             "broadcast-address": publicip,
