@@ -33,6 +33,11 @@
       "Default" : "6"
     },
 
+    "ClusterSize" : {
+      "Type" : "Number",
+      "Description" : "Number of nodes in cluster",
+    },
+
     "PublicKey" : {
       "Description" : "Public key matching private key used by LCM",
       "Type" : "String"
@@ -264,7 +269,7 @@
                   "./addNode.py ",
                   " --opsc-ip ", { "Ref" : "OpsCenterPubIP" },
                   " --clustername ", { "Ref" : "ClusterName" },
-                  " --dcsize ", { "Ref" : "DataCenterSize" },
+                  " --clustersize ", { "Ref" : "ClusterSize" },
                   " --dcname ", { "Ref" : "DataCenterName" }
                   ]]}
               }
