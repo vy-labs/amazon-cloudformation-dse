@@ -266,7 +266,7 @@
                   " --clustername ", { "Ref" : "ClusterName" },
                   " --dcsize ", { "Ref" : "DataCenterSize" },
                   " --dcname ", { "Ref" : "DataCenterName" }, " \n",
-                  "echo \"WARNING: agent config yaml generation to be removed\" \n"
+                  "echo \"WARNING: agent config yaml generation to be removed\" \n",
                   "cd ../util/ \n",
                   "dir=/var/lib/datastax-agent \n",
                   "mkdir -p $dir/conf \n",
