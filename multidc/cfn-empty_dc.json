@@ -265,7 +265,13 @@
                   " --opsc-ip ", { "Ref" : "OpsCenterPubIP" },
                   " --clustername ", { "Ref" : "ClusterName" },
                   " --dcsize ", { "Ref" : "DataCenterSize" },
-                  " --dcname ", { "Ref" : "DataCenterName" }
+                  " --dcname ", { "Ref" : "DataCenterName" }, " \n",
+                  "echo \"WARNING: agent config yaml generation to be removed\" \n"
+                  "cd ../util/ \n",
+                  "dir=/var/lib/datastax-agent \n",
+                  "mkdir -p $dir/conf \n",
+                  "./gen_address_yaml.sh > $dir/conf/address.yaml \n",
+                  "chown -R cassandra:cassandra $dir"
                   ]]}
               }
             }
