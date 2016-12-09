@@ -177,7 +177,7 @@ def triggerInstall(dcid):
             "job-type":"install",
             "job-scope":"datacenter",
             "resource-id":dcid,
-            "auto-bootstrap":True,
+            "auto-bootstrap":False,
             "continue-on-error":False})
     response = requests.post("http://{url}/api/v1/lcm/actions/install".format(url=opsc_url),data=data).json()
     pretty(response)
