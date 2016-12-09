@@ -48,10 +48,11 @@ def main():
         "name":"Default config",
         "datastax-version": "5.0.4",
         "json": {
-           'cassandra-yaml':
-              {"authenticator":"AllowAllAuthenticator"},
-              {"num_tokens":64},
-              {"endpoint_snitch":"GossipingPropertyFileSnitch"}
+           'cassandra-yaml': {
+              "authenticator":"AllowAllAuthenticator",
+              "num_tokens":64,
+              "endpoint_snitch":"GossipingPropertyFileSnitch"
+           }
         }})
 
     lcm.waitForOpsC()  # Block waiting for OpsC to spin up
