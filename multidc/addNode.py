@@ -17,8 +17,8 @@ def setupArgs():
     required.add_argument('--clustername', required=True, type=str,
                           help='Name of cluster.')
     required.add_argument('--dcname', required=True, type=str, help='Name of datacenter.')
-    parser.add_argument('--clustersize', type=int,
-                        help='Number of nodes in cluster, used to trigger install job.')
+    parser.add_argument('--dcsize', type=int, default=3,
+                        help='Number of nodes in datacenter, default 3.')
     parser.add_argument('--verbose',
                         action='store_true',
                         help='Verbose flag, right now a NO-OP.' )
@@ -36,26 +36,25 @@ def main():
     lcm.opsc_url = args.opsc_ip+':8888'
     #datacenters = ['dc0','dc1','dc2']
     dcname = args.dcname
-    clustersize = args.clustersize
+    dcsize = args.dcsize
     #pubkey = args.pubkey
 
     lcm.waitForOpsC()  # Block waiting for OpsC to spin up
 
     #writepubkey(pubkey)
     # ^^^ no-op, should happen up in the IaaS?
-    
-    # kludge, assuming ony one cluster
-    clusters = requests.get("http://{url}/api/v1/lcm/clusters/".format(url=lcm.opsc_url)).json()
-    cid = clusters['results'][0]['id']
 
     # Check if the DC --this-- node should belong to exists, if not add DC
     c = lcm.checkForDC(dcname)
     if (c == False):
         print("Datacenter {n} doesn't exist, creating...".format(n=dcname))
+        clusters = requests.get("http://{url}/api/v1/lcm/clusters/".format(url=lcm.opsc_url)).json()
+        cid = clusters['results'][0]['id']
         lcm.addDC(dcname,cid)
     else:
         print("Datacenter {d} exists".format(d=dcname))
 
+    # kludge, assuming ony one cluster
     dcid = ""
     datacenters = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=lcm.opsc_url)).json()
     for d in datacenters['results']:
@@ -85,9 +84,9 @@ def main():
 
     nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
-    if (nodecount == clustersize):
+    if (nodecount == dcsize):
         print("Last node added, triggering install job...")
-        lcm.triggerInstall(cid)
+        lcm.triggerInstall(dcid)
 
 # ----------------------------
 if __name__ == "__main__":
