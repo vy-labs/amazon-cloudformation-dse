@@ -260,7 +260,7 @@
                   "apt-get -y install unzip \n",
                   "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
                   "unzip dev.zip && \n",
-                  "cd amazon-cloudformation-dse-dev/multidc \n",
+                  "cd amazon-cloudformation-dse-dev/lcm/ \n",
                   "./addNode.py ",
                   " --opsc-ip ", { "Ref" : "OpsCenterPubIP" },
                   " --clustername ", { "Ref" : "ClusterName" },
