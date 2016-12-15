@@ -157,7 +157,10 @@ def addDC(dcname, cid):
     try:
         dc = json.dumps({
             'name': dcname,
-            'cluster-id': cid})
+            'cluster-id': cid,
+            "graph-enabled": 1,
+            "solr-enabled": 1,
+            "spark-enabled": 1})
         dcconf = requests.post("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url),data=dc).json()
         if 'code' in dcconf and ( dcconf['code'] == 409 ):
             print("Error {c} - {t} : {m}".format(c=dconf['code'],m=dconf['msg'],t=dcconf['t']))
@@ -165,7 +168,7 @@ def addDC(dcname, cid):
             alldcs = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url)).json()
             for r in alldcs['results']:
                 if r['name'] == dcname:
-                    print("Found id='{n}'".format(n=r['id'])) 
+                    print("Found id='{n}'".format(n=r['id']))
                     return r['id']
         print("Added datacenter {n}, json:".format(n=dcname))
         pretty(dcconf)
