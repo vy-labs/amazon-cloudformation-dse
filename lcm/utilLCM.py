@@ -158,9 +158,9 @@ def addDC(dcname, cid):
         dc = json.dumps({
             'name': dcname,
             'cluster-id': cid,
-            "graph-enabled": 1,
-            "solr-enabled": 1,
-            "spark-enabled": 1})
+            "graph-enabled": "true",
+            "solr-enabled": "true",
+            "spark-enabled": "true"})
         dcconf = requests.post("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url),data=dc).json()
         if 'code' in dcconf and ( dcconf['code'] == 409 ):
             print("Error {c} - {t} : {m}".format(c=dconf['code'],m=dconf['msg'],t=dcconf['t']))
