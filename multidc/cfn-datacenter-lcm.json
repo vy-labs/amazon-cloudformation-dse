@@ -255,8 +255,6 @@
                   "pip install requests \n",
                   "cd ~ubuntu \n",
                   "echo \"", { "Ref" : "PublicKey" }, "\" >> .ssh/authorized_keys \n",
-                  "chown ubuntu:ubuntu .ssh/lcm.pem.pub \n",
-                  "chmod 644 .ssh/lcm.pem.pub \n",
                   "apt-get -y install unzip \n",
                   "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
                   "unzip dev.zip && \n",
@@ -271,7 +269,7 @@
                   "dir=/var/lib/datastax-agent \n",
                   "mkdir -p $dir/conf \n",
                   "./gen_address_yaml.sh > $dir/conf/address.yaml \n",
-                  "chown -R cassandra:cassandra $dir"
+                  "chown -R ubuntu:ubuntu $dir"
                   ]]}
               }
             }
