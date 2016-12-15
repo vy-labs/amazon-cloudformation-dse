@@ -352,6 +352,18 @@
         ":8888"
         ]]},
       "Description" : "URL for OpsCenter"
+    },
+    "OpsCenterPublicIP" : {
+      "Value" :  { "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicIp" ] },
+      "Description" : "Public IP for OpsCenter"
+    },
+    "LCMURL" : {
+      "Value" : { "Fn::Join" : ["", [
+        "http://",
+        { "Fn::GetAtt" : [ "OpsCenterInstance" , "PublicDnsName" ] },
+        ":8888/opscenter/lcm.html"
+        ]]},
+      "Description" : "URL for Lifecycle Manager"
     }
   }
 }
