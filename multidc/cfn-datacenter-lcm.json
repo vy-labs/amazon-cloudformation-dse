@@ -14,6 +14,7 @@
     "OpsCenterPubIP" : {
       "Description" : "Public IP of OpsCenter instance.",
       "Type" : "String",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
       "ConstraintDescription" : "must be valid and public IP"
     },
 
