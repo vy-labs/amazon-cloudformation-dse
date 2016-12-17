@@ -17,6 +17,9 @@ def setupArgs():
     required.add_argument('--clustername', required=True, type=str,
                           help='Name of cluster.')
     required.add_argument('--dcname', required=True, type=str, help='Name of datacenter.')
+    required.add_argument('--nodeid', required=True, type=str, help='Unique node id.')
+    required.add_argument('--privip', required=True, type=str, help='Private ip of node.')
+    required.add_argument('--pubip', required=True, type=str, help='Public ip of node.')
     parser.add_argument('--dcsize', type=int, default=3,
                         help='Number of nodes in datacenter, default 3.')
     parser.add_argument('--verbose',
@@ -38,6 +41,9 @@ def main():
     dcname = args.dcname
     dcsize = args.dcsize
     #pubkey = args.pubkey
+    nodeid = args.nodeid
+    privateip = args.privip
+    publicip = args.pubip
 
     lcm.waitForOpsC()  # Block waiting for OpsC to spin up
 
@@ -66,10 +72,9 @@ def main():
     nodecount = nodes['count']
     # simple counting for node number hits a race condition... work around
     #nodename = 'node'+str(nodecount)
-    inst = requests.get("http://169.254.169.254/latest/meta-data/instance-id").content
-    nodename = 'node-'+inst
-    privateip = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").content
-    publicip = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4").content
+    # aws metadata service instance-id
+    #inst = requests.get("http://169.254.169.254/latest/meta-data/instance-id").content
+    nodename = 'node-'+nodeid
     nodeconf = json.dumps({
             'name': nodename,
             "datacenter-id": dcid,
