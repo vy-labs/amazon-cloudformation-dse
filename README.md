@@ -4,7 +4,7 @@ This repo contains AWS CloudFormation templates and related scripts to quickly
 spin up a DataStax Enterprise cluster.
 
 - [singledc](./singledc): spin up a DSE cluster that spans a single datacenter.
-- multidc (coming soon)
+- [multidc](./multidc): beta version of multidc deployment in a single AWS region or across regions.
 
 # Deploying to AWS
 
