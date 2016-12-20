@@ -275,7 +275,9 @@
                   "cd ../util/ \n",
                   "dir=/var/lib/datastax-agent \n",
                   "mkdir -p $dir/conf \n",
-                  "./gen_address_yaml.sh > $dir/conf/address.yaml \n",
+                  "priv=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4) \n"
+                  "pub=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)",
+                  "./gen_address_yaml.sh $priv $pub > $dir/conf/address.yaml \n",
                   "chown -R ubuntu:ubuntu $dir"
                   ]]}
               }
@@ -320,9 +322,10 @@
     "DSESecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
-        "GroupDescription" : "Enable HTTP and SSH access",
+        "GroupDescription" : "Enable HTTP(S), SSH access, and DSE ports",
         "SecurityGroupIngress" : [
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+          {"IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation"}},
           {"IpProtocol" : "tcp", "FromPort" : "8888", "ToPort" : "8888", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "7000", "ToPort" : "7001", "CidrIp" : "0.0.0.0/0"},
