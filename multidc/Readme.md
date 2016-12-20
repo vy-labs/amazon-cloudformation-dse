@@ -1,13 +1,9 @@
 
 # Info and Prerequisites
 
-<<<<<<< HEAD
 The purpose of the files in this directory are to make is quick and simple to deploy a multi-datacenter DSE cluster across AWS regions, however it can be used for a single region deployment. Note, this is under active development and will change in the future, namely deployment will be reduced to a single command. Also at this time the scripts don't take any arguments, changeable parameters are at the top of each script.
 
 These scripts and templates use OpsCenter's Lifecycle Manager (LCM) to install and configure DSE. This is discussed [here](./LCM.md).
-=======
-The purpose of the files in this directory are to make it quick and simple to deploy a multi-datacenter DSE cluster across AWS regions, however it can be used for a single region deployment. Note, this is *under active development and will change* in the future, namely deployment will be reduced to a single command. Also at this time the scripts don't take any arguments, changeable parameters are at the top of each script.
->>>>>>> master
 
 ## Prerequisites
 
