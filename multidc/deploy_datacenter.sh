@@ -35,6 +35,7 @@ stack="$dcname-stack"
 
 echo "Using opscenter ip: $opscip"
 echo "Using cluster name: $cname"
+echo "Using dcsize: $dcsize"
 echo "Using public key: $pubkey"
 echo "Using stack name: $stack"
 echo "Using template: $template"
