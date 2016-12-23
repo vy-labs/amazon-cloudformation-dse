@@ -19,6 +19,12 @@
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
     },
 
+    "Secret": {
+      "Description" : "test secret",
+      "Type": "String",
+      "NoEcho": true
+    },
+
     "VpcId" : {
       "Type" : "String",
       "Description" : "VpcId of your existing Virtual Private Cloud (VPC)",
@@ -191,7 +197,7 @@
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
-            "full_install" : [ "install_cfn", "install_opsc" , "gen_ssh_key", "setup_cluster"]
+            "full_install" : [ "install_cfn", "setup_taskcat", "install_opsc" , "gen_ssh_key", "setup_cluster"]
           },
 
           "install_cfn" : {
@@ -226,6 +232,16 @@
               "sysvinit" : {
                 "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
                               "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
+              }
+            }
+          },
+          "setup_taskcat" : {
+            "commands" : {
+              "01_setup_taskcat" : {
+                "command" : { "Fn::Join" : ["", [
+                  "#!/usr/bin/env bash -e \n",
+                  "echo \"", { "Ref" : "Secret" }, "\" > ~ubuntu/foo.secret \n"
+                  ]]}
               }
             }
           },
@@ -268,9 +284,9 @@
               "#!/usr/bin/env bash -e \n",
               "cd ~ubuntu \n",
               "pip install requests \n",
-              "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/master.zip \n",
-              "unzip master.zip \n",
-              "cd amazon-cloudformation-dse-master/lcm/ \n",
+              "wget https://github.com/DSPN/amazon-cloudformation-dse/archive/dev.zip \n",
+              "unzip dev.zip \n",
+              "cd amazon-cloudformation-dse-dev/lcm/ \n",
               "pubip=$(curl http://169.254.169.254/latest/meta-data/public-ipv4) \n",
               "privkey=$(readlink -f ~ubuntu/.ssh/lcm.pem) \n",
               "./setupCluster.py ",
