@@ -14,20 +14,7 @@ key=$(aws cloudformation describe-stacks --query 'Stacks[?StackName==`opscenter-
 #key="dse-keypair-us-west-1"
 ####################################################
 
-osxpath() {
-    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-}
-
-if [ "$(uname)" == "Darwin" ]; then
-    echo "Running on MacOS..."
-    operatingSystem="MacOS"
-    template=$(osxpath "./findos.sh")
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    echo "Running on Linux..."
-    operatingSystem="Linux"
-    template=$(readlink -e cfn-datacenter-lcm.json)
-fi
-
+template="$PWD/cfn-datacenter-lcm.json"
 opscip=$(aws cloudformation describe-stacks --query 'Stacks[?StackName==`opscenter-stack`].Outputs[] | [?OutputKey==`OpsCenterPublicIP`].OutputValue' --output text)
 cname=$(aws cloudformation describe-stacks --query 'Stacks[?StackName==`opscenter-stack`].Parameters[] | [?ParameterKey==`ClusterName`].ParameterValue' --output text)
 pubkey=$(../util/getpubkey.sh)
