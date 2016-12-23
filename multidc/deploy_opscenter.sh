@@ -26,7 +26,8 @@ aws cloudformation create-stack \
 --template-body file://$template \
 --parameters \
 ParameterKey=KeyName,ParameterValue=$keyname \
-ParameterKey=ClusterName,ParameterValue=$clustername
+ParameterKey=ClusterName,ParameterValue=$clustername \
+ParameterKey=Secret,ParameterValue="mysecret"
 
 region=$(aws configure get default.region)
 echo "$stack $region" >> teardown.txt
