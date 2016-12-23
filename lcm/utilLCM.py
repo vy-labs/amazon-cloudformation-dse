@@ -163,7 +163,7 @@ def addDC(dcname, cid):
             "spark-enabled": True})
         dcconf = requests.post("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url),data=dc).json()
         if 'code' in dcconf and ( dcconf['code'] == 409 ):
-            print("Error {c} - {t} : {m}".format(c=dconf['code'],m=dconf['msg'],t=dcconf['t']))
+            print("Error {c} - {t} : {m}".format(c=dcconf['code'],m=dconf['msg'],t=dcconf['t']))
             print("Finding id for dcname='{n}'".format(n=dcname))
             alldcs = requests.get("http://{url}/api/v1/lcm/datacenters/".format(url=opsc_url)).json()
             for r in alldcs['results']:
