@@ -276,6 +276,7 @@
                   "dir=/var/lib/datastax-agent \n",
                   "mkdir -p $dir/conf \n",
                   "./gen_address_yaml.sh $privip $pubip > $dir/conf/address.yaml \n",
+                  "cp $dir/conf/address.yaml $dir/conf/address.yaml.auto \n"
                   "chown -R ubuntu:ubuntu $dir"
                   ]]}
               }
