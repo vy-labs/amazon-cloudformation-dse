@@ -253,7 +253,6 @@
                   "cloud_type=\"aws\" \n",
                   "apt-get -y install unzip \n",
                   "cd ~ubuntu \n",
-                  "apt-get -y install unzip \n",
                   "wget https://github.com/DSPN/install-datastax-ubuntu/archive/aws-testing.zip \n",
                   "unzip aws-testing.zip \n",
                   "cd install-datastax-ubuntu-aws-testing/bin \n",
