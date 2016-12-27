@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import random
 
 # Yay globals!
 opsc_url = "127.0.0.0:8888"
@@ -184,6 +185,7 @@ def addDC(dcname, cid):
         raise
 
 def triggerInstall(dcid):
+    time.sleep(random.randint(10,60))
     data = json.dumps({
             "job-type":"install",
             "job-scope":"datacenter",
