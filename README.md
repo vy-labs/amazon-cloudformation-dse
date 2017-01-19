@@ -1,6 +1,6 @@
 # Info and Prerequisites
 
-The purpose of the files in this directory are to make is quick and simple to deploy a multi-datacenter DSE cluste
+The purpose of the files in this directory are to make is quick and simple to deploy a multi-datacenter DSE cluster
 These scripts and templates use OpsCenter's Lifecycle Manager (LCM) to install and configure DSE. This is discussed [here](./LCM.md).
 
 ## Prerequisites
