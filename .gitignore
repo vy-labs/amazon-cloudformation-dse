@@ -1,0 +1,14 @@
+*.pyc
+
+# PyCharm files
+*.idea
+
+#nano tmp files
+*nano.save
+*.swp
+
+# scratch work
+*scratch*
+
+#generated stacks to teardown file
+teardown.txt
