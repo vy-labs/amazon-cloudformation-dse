@@ -19,10 +19,8 @@ def setupArgs():
                         action='store_true',
                         help='verbose flag, right now a NO-OP' )
     parser.add_argument('--dse_username',
-                        action='store_true',
                         help='username')
     parser.add_argument('--dse_password',
-                         action='store_true',
                          help='password')
     return parser
 
