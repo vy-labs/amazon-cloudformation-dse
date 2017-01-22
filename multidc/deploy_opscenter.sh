@@ -5,7 +5,7 @@
 keyname="vycapital-v3"
 clustername="cassandra"
 username="xxxxdseusernamexx"
-password"xxxxdsepasswordxx"
+password="xxxxdsepasswordxx"
 ####################################################
 
 template="$PWD/cfn-opscenter.json"
