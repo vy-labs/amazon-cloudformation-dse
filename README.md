@@ -64,7 +64,7 @@ Wait until the new datacenter is visible and installed succesfully in opscenter
 Login into any node and do, (defualt credentails are username:cassandra, pwd:cassandra)
 
 ```
-CQLSH -u cassandra -p cassandra
+CQLSH_HOST=ip cqlsh -u cassandra -p cassandra
 
 ALTER KEYSPACE "system_auth" 
 WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc-us-east' : 3, 'dc-us-east-spark' : 3};
@@ -80,7 +80,7 @@ nodetool repair dse_security
 ```
 
 ```
-run `CQLSH` -u cassandra -p cassandra 
+run `CQLSH_HOST=ip cqlsh -u cassandra -p cassandra`
 
 CREATE ROLE admin WITH PASSWORD = 'xxx' 
     AND SUPERUSER = true 
@@ -155,10 +155,9 @@ https://docs.datastax.com/en/opscenter/6.0/opsc/configure/opscEnablingAuth.html
 https://docs.datastax.com/en/opscenter/6.0/opsc/configure/opscManageUsers.html
 ```
 
-Since we have less number of nodes, we don't want autoscaling group to
+Since we have less number of nodes, **we don't want autoscaling group to
 terminate any instance as the new node will take too much time to boot up,
-enable instance protection for the autoscaling group once you are done with the setup
-
+enable instance protection for the autoscaling group once you are done with the setup, also enable instance termination protection for already up instances**
 
 Stress test
 --
