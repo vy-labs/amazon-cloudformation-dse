@@ -71,6 +71,9 @@ WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc-us-east' : 3, 'dc-u
 
 ALTER KEYSPACE "dse_security" 
 WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc-us-east' : 3, 'dc-us-east-spark' : 3};
+
+ALTER KEYSPACE "dse_pref" 
+WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc-us-east' : 3, 'dc-us-east-spark' : 3};
 ```
 
 Run:
