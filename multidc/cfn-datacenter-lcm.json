@@ -280,7 +280,7 @@
                   "cd ~ubuntu \n",
                   "echo \"", { "Ref" : "PublicKey" }, "\" >> .ssh/authorized_keys \n",
                   "apt-get -y install unzip \n",
-                  "wget https://github.com/vy-labs/amazon-cloudformation-dse/archive/master.zip \n",
+                  "wget https://github.com/vy-labs/amazon-cloudformation-dse/archive/feature/production.zip \n",
                   "unzip master.zip && \n",
                   "cd amazon-cloudformation-dse-master/lcm/ \n",
                   "pubip=$(curl http://169.254.169.254/latest/meta-data/public-ipv4) \n",
