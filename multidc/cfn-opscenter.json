@@ -44,7 +44,7 @@
     "InstanceType" : {
       "Description" : "Node EC2 instance type",
       "Type" : "String",
-      "Default" : "m3.medium",
+      "Default" : "m4.large",
       "AllowedValues" : [ "t2.medium", "m3.medium", "m4.large", "m4.xlarge", "m4.2xlarge", "m4.4xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge"],
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
@@ -346,20 +346,20 @@
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation"}},
           {"IpProtocol" : "tcp", "FromPort" : "8888", "ToPort" : "8888", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "4040", "ToPort" : "4040", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "5598", "ToPort" : "5599", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7000", "ToPort" : "7001", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7077", "ToPort" : "7077", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7080", "ToPort" : "7081", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7199", "ToPort" : "7199", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8090", "ToPort" : "8090", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8182", "ToPort" : "8182", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8609", "ToPort" : "8609", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8983", "ToPort" : "8984", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "9042", "ToPort" : "9042", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "9091", "ToPort" : "9091", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "9160", "ToPort" : "9160", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "61620", "ToPort" : "61621", "CidrIp" : "0.0.0.0/0"}
+          {"IpProtocol" : "tcp", "FromPort" : "4040", "ToPort" : "4040", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "5598", "ToPort" : "5599", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7000", "ToPort" : "7001", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7077", "ToPort" : "7077", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7080", "ToPort" : "7081", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7199", "ToPort" : "7199", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8090", "ToPort" : "8090", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8182", "ToPort" : "8182", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8609", "ToPort" : "8609", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8983", "ToPort" : "8984", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "9042", "ToPort" : "9042", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "9091", "ToPort" : "9091", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "9160", "ToPort" : "9160", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "61620", "ToPort" : "61621", "CidrIp" : "172.31.0.0/16"}
        ]
       }
     }

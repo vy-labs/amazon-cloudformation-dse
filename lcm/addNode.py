@@ -84,7 +84,6 @@ def main():
             "listen-address": privateip,
             "rpc-address": privateip,
             "broadcast-address": privateip, #testing private ip
-            "broadcast-rpc-address": privateip,
             'rack': availability_zone})
     node = requests.post("http://{url}/api/v1/lcm/nodes/".format(url=lcm.opsc_url),data=nodeconf).json()
     print("Added node '{n}', json:".format(n=nodename))
@@ -93,11 +92,11 @@ def main():
     nodes = requests.get("http://{url}/api/v1/lcm/datacenters/{dcid}/nodes/".format(url=lcm.opsc_url,dcid=dcid)).json()
     nodecount = nodes['count']
 
-    if nodecount == dcsize:
-        print("Last node added, triggering install job...")
-        lcm.triggerInstall(dcid)
-    elif nodecount > dcsize:
-        lcm.triggerBootstrapNodeInstall(node['id'])
+    #if nodecount == dcsize:
+    #    print("Last node added, triggering install job...")
+    #    lcm.triggerInstall(dcid)
+    #elif nodecount > dcsize:
+    #    lcm.triggerBootstrapNodeInstall(node['id'])
 
 
 # ----------------------------

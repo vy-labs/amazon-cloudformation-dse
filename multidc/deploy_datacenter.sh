@@ -5,11 +5,11 @@
 if [[ $1 = "spark" ]]; then
     dcname="dc-us-east-spark"
     region="us-east-1"
-    dcsize=3
-    instance="m4.xlarge"
+    dcsize=2
+    instance="m4.2xlarge"
     spark=1
     volume=1000
-    instance_name="C*-Spark"
+    instance_name="cassandra-spark"
 else
     dcname="dc-us-east"
     region="us-east-1"
@@ -17,7 +17,7 @@ else
     instance="m4.xlarge"
     spark=0
     volume=1000
-    instance_name="C*"
+    instance_name="cassandra"
 fi
 
 # Comment out/uncomment vvv to use a different key from the opscenter stack,

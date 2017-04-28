@@ -2,10 +2,10 @@
 
 # Changable parameters
 ####################################################
-keyname="vycapital-v3"
+keyname="aws-production-cassandra"
 clustername="cassandra"
-username="xxxxdseusernamexx"
-password="xxxxdsepasswordxx"
+username="rajat@nvst.io"
+password="Supertramp2625298"
 ####################################################
 
 template="$PWD/cfn-opscenter.json"

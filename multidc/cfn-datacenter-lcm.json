@@ -350,18 +350,18 @@
           {"IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation"}},
           {"IpProtocol" : "tcp", "FromPort" : "4040", "ToPort" : "4040", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8888", "ToPort" : "8888", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7000", "ToPort" : "7001", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7077", "ToPort" : "7077", "CidrIp" : "0.0.0.0/0"},
+          {"IpProtocol" : "tcp", "FromPort" : "8888", "ToPort" : "8888", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7000", "ToPort" : "7001", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "7077", "ToPort" : "7077", "CidrIp" : "172.31.0.0/16"},
           {"IpProtocol" : "tcp", "FromPort" : "7080", "ToPort" : "7081", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "7199", "ToPort" : "7199", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "9042", "ToPort" : "9042", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "9160", "ToPort" : "9160", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "61620", "ToPort" : "61621", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8983", "ToPort" : "8983", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8012", "ToPort" : "8012", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8090", "ToPort" : "8090", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "0", "ToPort" : "65535", "CidrIp" : "172.31.0.0/16"}
+          {"IpProtocol" : "tcp", "FromPort" : "7199", "ToPort" : "7199", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "9042", "ToPort" : "9042", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "9160", "ToPort" : "9160", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "61620", "ToPort" : "61621", "CidrIp": "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8983", "ToPort" : "8983", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8012", "ToPort" : "8012", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "8090", "ToPort" : "8090", "CidrIp" : "172.31.0.0/16"},
+          {"IpProtocol" : "tcp", "FromPort" : "10000", "ToPort" : "10001", "CidrIp" : "172.31.0.0/16"}
         ]
       }
     }
