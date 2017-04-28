@@ -5,16 +5,16 @@
 if [[ $1 = "spark" ]]; then
     dcname="dc-us-east-spark"
     region="us-east-1"
-    dcsize=3
-    instance="m4.xlarge"
+    dcsize=1
+    instance="m4.large"
     spark=1
     volume=1000
     instance_name="C*-Spark"
 else
     dcname="dc-us-east"
     region="us-east-1"
-    dcsize=3
-    instance="m4.xlarge"
+    dcsize=2
+    instance="m4.large"
     spark=0
     volume=1000
     instance_name="C*"

@@ -2,10 +2,10 @@
 
 # Changable parameters
 ####################################################
-keyname="vycapital-v3"
+keyname="aws-staging-cassandra"
 clustername="cassandra"
-username="xxxxdseusernamexx"
-password="xxxxdsepasswordxx"
+username="xxx"
+password="xxx"
 ####################################################
 
 template="$PWD/cfn-opscenter.json"
