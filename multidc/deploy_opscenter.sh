@@ -4,8 +4,8 @@
 ####################################################
 keyname="aws-production-cassandra"
 clustername="cassandra"
-username="xxx"
-password="xxx"
+username="rajat@nvst.io"
+password="Supertramp2625298"
 ####################################################
 
 template="$PWD/cfn-opscenter.json"
