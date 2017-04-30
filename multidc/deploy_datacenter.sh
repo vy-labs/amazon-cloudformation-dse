@@ -8,7 +8,7 @@ if [[ $1 = "spark" ]]; then
     dcsize=2
     instance="m4.2xlarge"
     spark=1
-    volume=1000
+    volume=800
     instance_name="cassandra-spark"
 else
     dcname="dc-us-east"
@@ -16,7 +16,7 @@ else
     dcsize=3
     instance="m4.xlarge"
     spark=0
-    volume=1000
+    volume=800
     instance_name="cassandra"
 fi
 

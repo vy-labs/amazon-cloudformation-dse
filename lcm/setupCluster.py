@@ -53,7 +53,7 @@ def main():
 
     defaultconfig = json.dumps({
         "name":"Default config",
-        "datastax-version": "5.0.5",
+        "datastax-version": "5.1",
         "json": {
            'cassandra-yaml': {
               "authenticator":"PasswordAuthenticator",
